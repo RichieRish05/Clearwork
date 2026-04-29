@@ -1,1 +1,1 @@
-# CollegeConsilting
+# CollegeConsulting
