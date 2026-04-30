@@ -5,6 +5,13 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { Menu, X } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
+
+const NAV = [
+  { label: "Pricing", href: "/#pricing" },
+  { label: "Blogs", href: "/#blog" },
+  { label: "Guide", href: "/#guide" },
+] as const
 
 const Navbar1 = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -33,16 +40,19 @@ const Navbar1 = () => {
         </div>
 
         <nav className="hidden md:flex items-center space-x-8">
-          {["Pricing", "Blogs", "Guide"].map((item) => (
+          {NAV.map((item) => (
             <motion.div
-              key={item}
+              key={item.label}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
               whileHover={{ scale: 1.05 }}
             >
-              <a href="#" className="text-sm text-gray-900 hover:text-gray-600 transition-colors font-medium">
-                {item}
+              <a
+                href={item.href}
+                className="text-sm text-gray-900 hover:text-gray-600 transition-colors font-medium"
+              >
+                {item.label}
               </a>
             </motion.div>
           ))}
@@ -55,12 +65,12 @@ const Navbar1 = () => {
           transition={{ duration: 0.3, delay: 0.2 }}
           whileHover={{ scale: 1.05 }}
         >
-          <a
-            href="#"
+          <Link
+            href="/signup"
             className="inline-flex items-center justify-center px-5 py-2 text-sm text-white bg-black rounded-full hover:bg-gray-800 transition-colors"
           >
             Get Started
-          </a>
+          </Link>
         </motion.div>
 
         <motion.button className="md:hidden flex items-center" onClick={toggleMenu} whileTap={{ scale: 0.9 }}>
@@ -88,16 +98,20 @@ const Navbar1 = () => {
               <X className="h-6 w-6 text-gray-900" />
             </motion.button>
             <div className="flex flex-col space-y-6">
-              {["Home", "Pricing", "Docs", "Projects"].map((item, i) => (
+              {NAV.map((item, i) => (
                 <motion.div
-                  key={item}
+                  key={item.label}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 + 0.1 }}
                   exit={{ opacity: 0, x: 20 }}
                 >
-                  <a href="#" className="text-base text-gray-900 font-medium" onClick={toggleMenu}>
-                    {item}
+                  <a
+                    href={item.href}
+                    className="text-base text-gray-900 font-medium"
+                    onClick={toggleMenu}
+                  >
+                    {item.label}
                   </a>
                 </motion.div>
               ))}
@@ -109,13 +123,13 @@ const Navbar1 = () => {
                 exit={{ opacity: 0, y: 20 }}
                 className="pt-6"
               >
-                <a
-                  href="#"
+                <Link
+                  href="/signup"
                   className="inline-flex items-center justify-center w-full px-5 py-3 text-base text-white bg-black rounded-full hover:bg-gray-800 transition-colors "
                   onClick={toggleMenu}
                 >
                   Get Started
-                </a>
+                </Link>
               </motion.div>
             </div>
           </motion.div>
