@@ -4,6 +4,7 @@ import * as React from "react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { Menu, X } from "lucide-react"
+import Image from "next/image"
 
 const Navbar1 = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -21,20 +22,18 @@ const Navbar1 = () => {
             whileHover={{ rotate: 10 }}
             transition={{ duration: 0.3 }}
           >
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="16" fill="url(#paint0_linear)" />
-              <defs>
-                <linearGradient id="paint0_linear" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#FF9966" />
-                  <stop offset="1" stopColor="#FF5E62" />
-                </linearGradient>
-              </defs>
-            </svg>
+            <Image
+              src="/Logo.png"
+              alt="Logo"
+              width={32}
+              height={32}
+              className="w-full h-full object-contain"
+            />
           </motion.div>
         </div>
 
         <nav className="hidden md:flex items-center space-x-8">
-          {["Home", "Pricing", "Docs", "Projects"].map((item) => (
+          {["Pricing", "Blogs", "Guide"].map((item) => (
             <motion.div
               key={item}
               initial={{ opacity: 0, y: -10 }}
