@@ -9,7 +9,7 @@ import Link from "next/link"
 
 const NAV = [
   { label: "Pricing", href: "/#pricing" },
-  { label: "Blogs", href: "/#blog" },
+  { label: "Blog", href: "/#blog" },
   { label: "Guide", href: "/#guide" },
 ] as const
 
@@ -30,7 +30,7 @@ const Navbar1 = () => {
             transition={{ duration: 0.3 }}
           >
             <Image
-              src="/Logo.png"
+              src="/Logo-v2.png"
               alt="Logo"
               width={32}
               height={32}
