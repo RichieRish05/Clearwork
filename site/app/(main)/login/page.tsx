@@ -1,14 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { GridPattern } from "@/components/ui/grid-pattern";
-import { signup } from "./actions";
+import { login } from "./actions";
 
-export default async function SignupPage({
+export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; status?: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
-  const { error, status } = await searchParams;
+  const { error } = await searchParams;
 
   return (
     <div className="relative flex flex-1 flex-col items-center justify-center bg-white font-sans overflow-hidden px-6 py-16">
@@ -38,19 +38,19 @@ export default async function SignupPage({
             Office of Admissions
           </span>
           <h1 className="mt-4 font-[family-name:var(--font-instrument-serif)] text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] tracking-tight text-neutral-950">
-            Begin your{" "}
+            Welcome{" "}
             <span className="italic font-normal" style={{ color: "#8c1515" }}>
-              application
+              back
             </span>
             .
           </h1>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-neutral-700">
-            A few details to enroll yourself. Welcome to your college application journey!
+            Sign in to pick up where you left off.
           </p>
         </div>
 
         <form
-          action={signup}
+          action={login}
           className="mt-10 rounded-3xl border border-black bg-white p-7 shadow-[0_4px_0_0_rgba(0,0,0,1)]"
         >
           <Field
@@ -64,38 +64,29 @@ export default async function SignupPage({
             label="Password"
             name="password"
             type="password"
-            placeholder="At least 6 characters"
+            placeholder="••••••••"
             required
           />
 
           {error ? (
             <p className="mt-4 text-sm text-red-700">{error}</p>
           ) : null}
-          {status === "check-email" ? (
-            <p className="mt-4 text-sm text-neutral-700">
-              Check your inbox to confirm your email, then sign in.
-            </p>
-          ) : null}
 
           <button
             type="submit"
             className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-black bg-black px-5 py-3 text-sm font-medium text-white shadow-[0_4px_0_0_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5"
           >
-            Submit application
+            Sign in
           </button>
-
-          <p className="mt-5 text-center text-[11px] uppercase tracking-[0.2em] text-neutral-500 font-[family-name:var(--font-geist-mono)]">
-            By submitting you agree to our terms
-          </p>
         </form>
 
         <p className="mt-8 text-center text-sm text-neutral-700">
-          Already enrolled?{" "}
+          New here?{" "}
           <Link
-            href="/login"
+            href="/signup"
             className="italic font-[family-name:var(--font-instrument-serif)] text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-950"
           >
-            sign in
+            create an account
           </Link>
           .
         </p>
