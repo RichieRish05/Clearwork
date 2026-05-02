@@ -22,5 +22,5 @@ export async function confirmReset(formData: FormData) {
     console.error("auth/confirm verifyOtp failed:", error.message);
   }
 
-  redirect("/auth/login?error=invalid_link");
+  redirect("/auth/login");
 }
