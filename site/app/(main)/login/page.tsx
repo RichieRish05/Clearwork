@@ -1,14 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useActionState } from "react";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { login } from "./actions";
 
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string }>;
-}) {
-  const { error } = await searchParams;
+export default function LoginPage() {
+  const [state, formAction] = useActionState(login, null);
 
   return (
     <div className="relative flex flex-1 flex-col items-center justify-center bg-white font-sans overflow-hidden px-6 py-16">
@@ -22,7 +21,7 @@ export default async function LoginPage({
         href="/"
         className="absolute top-6 left-6 inline-flex items-center gap-2 rounded-full border border-black bg-white px-4 py-2 text-sm shadow-[0_3px_0_0_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5"
       >
-        <span aria-hidden>←</span> Back home
+        Back home
       </Link>
 
       <div className="relative z-10 w-full max-w-md">
@@ -50,7 +49,7 @@ export default async function LoginPage({
         </div>
 
         <form
-          action={login}
+          action={formAction}
           className="mt-10 rounded-3xl border border-black bg-white p-7 shadow-[0_4px_0_0_rgba(0,0,0,1)]"
         >
           <Field
@@ -68,8 +67,8 @@ export default async function LoginPage({
             required
           />
 
-          {error ? (
-            <p className="mt-4 text-sm text-red-700">{error}</p>
+          {state?.error ? (
+            <p className="mt-4 text-sm text-red-700">{state.error}</p>
           ) : null}
 
           <button

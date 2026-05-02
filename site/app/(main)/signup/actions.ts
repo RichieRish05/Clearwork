@@ -4,7 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-export async function signup(formData: FormData) {
+export type SignupState = { error?: string } | null;
+
+export async function signup(
+  _prev: SignupState,
+  formData: FormData,
+): Promise<SignupState> {
   const supabase = await createClient();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
@@ -15,7 +20,12 @@ export async function signup(formData: FormData) {
     password,
     options: { data: { full_name: fullName } },
   });
-  if (error) redirect(`/signup?error=${encodeURIComponent(error.message)}`);
+  if (error) return { error: error.message };
+  if (!data.user?.identities?.length) {
+    return {
+      error: "An account with this email already exists. Try signing in instead.",
+    };
+  }
   if (!data.session) redirect("/signup?status=check-email");
   revalidatePath("/", "layout");
   redirect("/");
