@@ -46,7 +46,7 @@ export function Hero() {
               hidden: {},
               visible: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
             }}
-            className="font-[family-name:var(--font-instrument-serif)] text-[clamp(2.75rem,8vw,6.25rem)] leading-[0.95] tracking-tight text-neutral-950"
+            className="font-serif text-[clamp(2.75rem,8vw,6.25rem)] leading-[0.95] tracking-tight text-neutral-950"
           >
             <motion.span
               variants={lineVariants}
@@ -142,7 +142,7 @@ function Stat({
 }) {
   return (
     <div className={`flex flex-col items-center lg:items-start ${className}`}>
-      <span className="font-[family-name:var(--font-instrument-serif)] text-2xl tracking-tight text-neutral-950 normal-case">
+      <span className="font-serif text-2xl tracking-tight text-neutral-950 normal-case">
         {value}
       </span>
       <span className="mt-0.5">{label}</span>

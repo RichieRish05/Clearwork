@@ -115,12 +115,12 @@ export function Pricing() {
 
               <div className="flex items-baseline gap-2">
                 <span
-                  className="font-[family-name:var(--font-instrument-serif)] text-2xl text-neutral-950"
+                  className="font-serif text-2xl text-neutral-950"
                 >
                   {tier.name}
                 </span>
                 <span
-                  className="font-[family-name:var(--font-instrument-serif)] italic text-2xl"
+                  className="font-serif italic text-2xl"
                   style={{ color: tier.color }}
                 >
                   / {tier.italic}
@@ -132,7 +132,7 @@ export function Pricing() {
               </p>
 
               <div className="mt-6 flex items-end gap-1">
-                <span className="font-[family-name:var(--font-instrument-serif)] text-6xl leading-none text-neutral-950">
+                <span className="font-serif text-6xl leading-none text-neutral-950">
                   {tier.price}
                 </span>
                 <span className="pb-2 text-sm text-neutral-600">

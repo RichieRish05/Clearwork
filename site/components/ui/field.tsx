@@ -13,7 +13,7 @@ export function Field({
 }) {
   return (
     <label className="block mt-4 first:mt-0">
-      <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.24em] text-neutral-600">
+      <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-600">
         {label}
       </span>
       <input

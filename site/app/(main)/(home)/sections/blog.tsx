@@ -93,14 +93,14 @@ export function Blog() {
           className="mt-14 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 rounded-3xl border border-black bg-white p-6 sm:p-8 shadow-[0_6px_0_0_rgba(0,0,0,1)]"
         >
           <div
-            className="relative overflow-hidden rounded-2xl border border-black aspect-[5/4] lg:aspect-auto lg:min-h-[360px]"
+            className="relative overflow-hidden rounded-2xl border border-black aspect-5/4 lg:aspect-auto lg:min-h-9"
             style={{
               background: `radial-gradient(120% 80% at 20% 10%, ${FEATURED.color}, #1a0408 70%)`,
             }}
           >
-            <div className="absolute inset-0 mix-blend-overlay opacity-40 [background-image:radial-gradient(rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:6px_6px]" />
+            <div className="absolute inset-0 mix-blend-overlay opacity-40 bg-[radial-gradient(rgba(255,255,255,0.6)_1px,transparent_1px)] bg-size-[6px_6px]" />
             <div className="absolute top-5 left-5 right-5 flex items-center justify-between text-white">
-              <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.28em] opacity-80">
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] opacity-80">
                 {FEATURED.issue}
               </span>
               <span className="rounded-full border border-white/40 bg-white/10 px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] backdrop-blur">
@@ -109,21 +109,21 @@ export function Blog() {
             </div>
             <div className="absolute bottom-6 left-6 right-6">
               <p
-                className="font-[family-name:var(--font-instrument-serif)] italic text-white/90 text-2xl"
+                className="font-serif italic text-white/90 text-2xl"
               >
                 {FEATURED.italic}
               </p>
-              <p className="mt-2 font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.28em] text-white/70">
+              <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.28em] text-white/70">
                 {FEATURED.kicker} · {FEATURED.date}
               </p>
             </div>
           </div>
 
           <div className="flex flex-col justify-center">
-            <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.28em] text-neutral-500">
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-neutral-500">
               {FEATURED.read}
             </span>
-            <h3 className="mt-3 font-[family-name:var(--font-instrument-serif)] text-3xl sm:text-4xl leading-[1.05] tracking-tight text-neutral-950">
+            <h3 className="mt-3 font-serif text-3xl sm:text-4xl leading-[1.05] tracking-tight text-neutral-950">
               {FEATURED.title}
             </h3>
             <p className="mt-5 text-[15px] leading-relaxed text-neutral-700">
@@ -159,22 +159,22 @@ export function Blog() {
             >
               <div className="flex items-center justify-between">
                 <span
-                  className="font-[family-name:var(--font-instrument-serif)] italic text-lg"
+                  className="font-serif italic text-lg"
                   style={{ color: p.color }}
                 >
                   {p.italic}
                 </span>
-                <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.22em] text-neutral-500">
+                <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-neutral-500">
                   {p.issue}
                 </span>
               </div>
-              <h4 className="mt-4 font-[family-name:var(--font-instrument-serif)] text-2xl leading-[1.1] text-neutral-950">
+              <h4 className="mt-4 font-serif text-2xl leading-[1.1] text-neutral-950">
                 {p.title}
               </h4>
               <p className="mt-3 text-sm leading-relaxed text-neutral-700">
                 {p.excerpt}
               </p>
-              <div className="mt-6 flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-neutral-500 font-[family-name:var(--font-geist-mono)]">
+              <div className="mt-6 flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-neutral-500 font-mono">
                 <span>{p.date}</span>
                 <span>{p.read}</span>
               </div>

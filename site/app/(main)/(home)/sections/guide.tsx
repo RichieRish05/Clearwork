@@ -135,10 +135,10 @@ export function Guide() {
                   >
                     <div className="flex items-baseline justify-between gap-4">
                       <div>
-                        <span className="font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-[0.28em] text-neutral-500">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-neutral-500">
                           {s.year}
                         </span>
-                        <h3 className="mt-1 font-[family-name:var(--font-instrument-serif)] text-3xl text-neutral-950 leading-tight">
+                        <h3 className="mt-1 font-serif text-3xl text-neutral-950 leading-tight">
                           <span
                             className="italic"
                             style={{ color: s.color }}
@@ -150,7 +150,7 @@ export function Guide() {
                       </div>
                       <span
                         aria-hidden
-                        className="hidden sm:grid place-items-center h-12 w-12 shrink-0 rounded-full border border-black font-[family-name:var(--font-instrument-serif)] italic text-2xl text-neutral-950"
+                        className="hidden sm:grid place-items-center h-12 w-12 shrink-0 rounded-full border border-black font-serif italic text-2xl text-neutral-950"
                         style={{ background: `${s.color}14` }}
                       >
                         {romanize(i + 1)}
@@ -165,7 +165,7 @@ export function Guide() {
                       {s.marks.map((m) => (
                         <li
                           key={m}
-                          className="rounded-full border border-black/80 bg-white px-3 py-1 text-[11px] uppercase tracking-[0.16em] text-neutral-700 font-[family-name:var(--font-geist-mono)]"
+                          className="rounded-full border border-black/80 bg-white px-3 py-1 text-[11px] uppercase tracking-[0.16em] text-neutral-700 font-mono"
                           style={{ boxShadow: `inset 0 -2px 0 ${s.color}40` }}
                         >
                           {m}
@@ -187,10 +187,10 @@ export function Guide() {
             className="relative mt-14 mx-auto max-w-md text-center"
           >
             <div className="relative rounded-3xl border border-black bg-neutral-950 text-white p-8 shadow-[0_6px_0_0_rgba(0,0,0,1)]">
-              <span className="font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-[0.28em] text-white/60">
+              <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/60">
                 Decision Day
               </span>
-              <p className="mt-3 font-[family-name:var(--font-instrument-serif)] text-3xl leading-snug">
+              <p className="mt-3 font-serif text-3xl leading-snug">
                 <span className="italic" style={{ color: "#ffd166" }}>
                   Congratulations
                 </span>{" "}

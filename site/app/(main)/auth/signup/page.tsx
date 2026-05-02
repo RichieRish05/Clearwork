@@ -29,10 +29,10 @@ export default function SignupPage() {
             height={44}
             className="mb-6"
           />
-          <span className="font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-[0.28em] text-neutral-500">
+          <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-neutral-500">
             Office of Admissions
           </span>
-          <h1 className="mt-4 font-[family-name:var(--font-instrument-serif)] text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] tracking-tight text-neutral-950">
+          <h1 className="mt-4 font-serif text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] tracking-tight text-neutral-950">
             Begin your{" "}
             <span className="italic font-normal" style={{ color: "#8c1515" }}>
               application
@@ -79,7 +79,7 @@ export default function SignupPage() {
             Submit application
           </button>
 
-          <p className="mt-5 text-center text-[11px] uppercase tracking-[0.2em] text-neutral-500 font-[family-name:var(--font-geist-mono)]">
+          <p className="mt-5 text-center text-[11px] uppercase tracking-[0.2em] text-neutral-500 font-mono">
             By submitting you agree to our terms
           </p>
         </form>
@@ -88,7 +88,7 @@ export default function SignupPage() {
           Already enrolled?{" "}
           <Link
             href="/auth/login"
-            className="italic font-[family-name:var(--font-instrument-serif)] text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-950"
+            className="italic font-serif text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-950"
           >
             sign in
           </Link>

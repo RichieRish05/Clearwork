@@ -45,10 +45,10 @@ export default function LoginPage() {
             height={44}
             className="mb-6"
           />
-          <span className="font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-[0.28em] text-neutral-500">
+          <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-neutral-500">
             Office of Admissions
           </span>
-          <h1 className="mt-4 font-[family-name:var(--font-instrument-serif)] text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] tracking-tight text-neutral-950">
+          <h1 className="mt-4 font-serif text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] tracking-tight text-neutral-950">
             Welcome{" "}
             <span className="italic font-normal" style={{ color: "#8c1515" }}>
               back
@@ -82,7 +82,7 @@ export default function LoginPage() {
           <div className="mt-3 text-right">
             <Link
               href="/auth/forgot-password"
-              className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.24em] text-neutral-600 underline decoration-neutral-300 underline-offset-4 hover:text-neutral-950 hover:decoration-neutral-950"
+              className="font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-600 underline decoration-neutral-300 underline-offset-4 hover:text-neutral-950 hover:decoration-neutral-950"
             >
               Forgot password?
             </Link>
@@ -112,7 +112,7 @@ export default function LoginPage() {
           New here?{" "}
           <Link
             href="/auth/signup"
-            className="italic font-[family-name:var(--font-instrument-serif)] text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-950"
+            className="italic font-serif text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-950"
           >
             create an account
           </Link>
