@@ -38,7 +38,7 @@ export default function ResetPasswordPage() {
             .
           </h1>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-neutral-700">
-            Choose something memorable, at least 8 characters.
+            Choose something memorable, at least 6 characters.
           </p>
         </div>
 

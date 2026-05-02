@@ -66,7 +66,7 @@ const Navbar1 = () => {
           whileHover={{ scale: 1.05 }}
         >
           <Link
-            href="/auth/signup"
+            href="/auth/login"
             className="inline-flex items-center justify-center px-5 py-2 text-sm text-white bg-black rounded-full hover:bg-gray-800 transition-colors"
           >
             Get Started

@@ -2,8 +2,6 @@ import Image from "next/image";
 import { confirmReset } from "./actions";
 
 type SearchParams = Promise<{
-  token_hash?: string;
-  type?: string;
   code?: string;
   next?: string;
 }>;
@@ -14,12 +12,10 @@ export default async function ConfirmPage({
   searchParams: SearchParams;
 }) {
   const params = await searchParams;
-  const token_hash = params.token_hash ?? "";
-  const type = params.type ?? "";
   const code = params.code ?? "";
   const next = params.next ?? "/";
 
-  const hasToken = (token_hash && type) || code;
+  const hasCode = Boolean(code);
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-6 py-16">
@@ -43,19 +39,17 @@ export default async function ConfirmPage({
             .
           </h1>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-neutral-700">
-            {hasToken
+            {hasCode
               ? "Click the button below to continue setting a new password."
               : "This link is missing required information. Request a new reset email."}
           </p>
         </div>
 
-        {hasToken ? (
+        {hasCode ? (
           <form
             action={confirmReset}
             className="mt-10 rounded-3xl border border-black bg-white p-7 shadow-[0_4px_0_0_rgba(0,0,0,1)]"
           >
-            <input type="hidden" name="token_hash" value={token_hash} />
-            <input type="hidden" name="type" value={type} />
             <input type="hidden" name="code" value={code} />
             <input type="hidden" name="next" value={next} />
             <button
