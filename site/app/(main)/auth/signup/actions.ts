@@ -26,7 +26,7 @@ export async function signup(
       error: "An account with this email already exists. Try signing in instead.",
     };
   }
-  if (!data.session) redirect("/signup?status=check-email");
+  if (!data.session) redirect("/auth/signup?status=check-email");
   revalidatePath("/", "layout");
   redirect("/");
 }

@@ -3,22 +3,32 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useActionState } from "react";
-import { GridPattern } from "@/components/ui/grid-pattern";
-import { signup } from "./actions";
+import { useActionState, useEffect, useState } from "react";
+import { login } from "./actions";
 
-export default function SignupPage() {
-  const [state, formAction] = useActionState(signup, null);
-  const status = useSearchParams().get("status");
+export default function LoginPage() {
+  const [state, formAction] = useActionState(login, null);
+  const searchParams = useSearchParams();
+  const reset = searchParams.get("reset");
+  const linkError = searchParams.get("error");
+  const [hashError, setHashError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!window.location.hash) return;
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    const description = hashParams.get("error_description");
+    if (description) {
+      setHashError(description.replace(/\+/g, " "));
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
+    }
+  }, []);
 
   return (
-    <div className="relative flex flex-1 flex-col items-center justify-center bg-white font-sans overflow-hidden px-6 py-16">
-      <GridPattern
-        width={56}
-        height={56}
-        className="stroke-gray-300/40 fill-transparent mask-[radial-gradient(ellipse_at_center,black_25%,transparent_90%)]"
-      />
-
+    <div className="flex flex-1 flex-col items-center justify-center px-6 py-16">
       <Link
         href="/"
         className="absolute top-6 left-6 inline-flex items-center gap-2 rounded-full border border-black bg-white px-4 py-2 text-sm shadow-[0_3px_0_0_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5"
@@ -39,14 +49,14 @@ export default function SignupPage() {
             Office of Admissions
           </span>
           <h1 className="mt-4 font-[family-name:var(--font-instrument-serif)] text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] tracking-tight text-neutral-950">
-            Begin your{" "}
+            Welcome{" "}
             <span className="italic font-normal" style={{ color: "#8c1515" }}>
-              application
+              back
             </span>
             .
           </h1>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-neutral-700">
-            A few details to enroll yourself. Welcome to your college application journey!
+            Sign in to pick up where you left off.
           </p>
         </div>
 
@@ -65,16 +75,32 @@ export default function SignupPage() {
             label="Password"
             name="password"
             type="password"
-            placeholder="At least 6 characters"
+            placeholder="••••••••"
             required
           />
+
+          <div className="mt-3 text-right">
+            <Link
+              href="/auth/forgot-password"
+              className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-[0.24em] text-neutral-600 underline decoration-neutral-300 underline-offset-4 hover:text-neutral-950 hover:decoration-neutral-950"
+            >
+              Forgot password?
+            </Link>
+          </div>
 
           {state?.error ? (
             <p className="mt-4 text-sm text-red-700">{state.error}</p>
           ) : null}
-          {status === "check-email" ? (
+          {reset === "success" ? (
             <p className="mt-4 text-sm text-neutral-700">
-              Check your inbox to confirm your email, then sign in.
+              Your password was updated. Sign in with your new password.
+            </p>
+          ) : null}
+          {hashError ? (
+            <p className="mt-4 text-sm text-red-700">{hashError}</p>
+          ) : linkError === "invalid_link" ? (
+            <p className="mt-4 text-sm text-red-700">
+              That reset link is invalid or expired. Request a new one.
             </p>
           ) : null}
 
@@ -82,21 +108,17 @@ export default function SignupPage() {
             type="submit"
             className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-black bg-black px-5 py-3 text-sm font-medium text-white shadow-[0_4px_0_0_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5"
           >
-            Submit application
+            Sign in
           </button>
-
-          <p className="mt-5 text-center text-[11px] uppercase tracking-[0.2em] text-neutral-500 font-[family-name:var(--font-geist-mono)]">
-            By submitting you agree to our terms
-          </p>
         </form>
 
         <p className="mt-8 text-center text-sm text-neutral-700">
-          Already enrolled?{" "}
+          New here?{" "}
           <Link
-            href="/login"
+            href="/auth/signup"
             className="italic font-[family-name:var(--font-instrument-serif)] text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-950"
           >
-            sign in
+            create an account
           </Link>
           .
         </p>

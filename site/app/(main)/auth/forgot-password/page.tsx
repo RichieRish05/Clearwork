@@ -3,25 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useActionState } from "react";
-import { GridPattern } from "@/components/ui/grid-pattern";
-import { login } from "./actions";
+import { requestReset } from "./actions";
 
-export default function LoginPage() {
-  const [state, formAction] = useActionState(login, null);
+export default function ForgotPasswordPage() {
+  const [state, formAction] = useActionState(requestReset, null);
 
   return (
-    <div className="relative flex flex-1 flex-col items-center justify-center bg-white font-sans overflow-hidden px-6 py-16">
-      <GridPattern
-        width={56}
-        height={56}
-        className="stroke-gray-300/40 fill-transparent mask-[radial-gradient(ellipse_at_center,black_25%,transparent_90%)]"
-      />
-
+    <div className="flex flex-1 flex-col items-center justify-center px-6 py-16">
       <Link
-        href="/"
+        href="/auth/login"
         className="absolute top-6 left-6 inline-flex items-center gap-2 rounded-full border border-black bg-white px-4 py-2 text-sm shadow-[0_3px_0_0_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5"
       >
-        Back home
+        Back to sign in
       </Link>
 
       <div className="relative z-10 w-full max-w-md">
@@ -37,14 +30,14 @@ export default function LoginPage() {
             Office of Admissions
           </span>
           <h1 className="mt-4 font-[family-name:var(--font-instrument-serif)] text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] tracking-tight text-neutral-950">
-            Welcome{" "}
+            Forgot your{" "}
             <span className="italic font-normal" style={{ color: "#8c1515" }}>
-              back
+              password
             </span>
-            .
+            ?
           </h1>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-neutral-700">
-            Sign in to pick up where you left off.
+            Enter your email and we&rsquo;ll send you a link to set a new one.
           </p>
         </div>
 
@@ -59,33 +52,32 @@ export default function LoginPage() {
             placeholder="eleanor@whitaker.co"
             required
           />
-          <Field
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="••••••••"
-            required
-          />
 
           {state?.error ? (
             <p className="mt-4 text-sm text-red-700">{state.error}</p>
+          ) : null}
+          {state?.sent ? (
+            <p className="mt-4 text-sm text-neutral-700">
+              If an account exists for that email, a reset link is on its way.
+              Check your inbox.
+            </p>
           ) : null}
 
           <button
             type="submit"
             className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-black bg-black px-5 py-3 text-sm font-medium text-white shadow-[0_4px_0_0_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5"
           >
-            Sign in
+            Send reset link
           </button>
         </form>
 
         <p className="mt-8 text-center text-sm text-neutral-700">
-          New here?{" "}
+          Remembered it?{" "}
           <Link
-            href="/signup"
+            href="/auth/login"
             className="italic font-[family-name:var(--font-instrument-serif)] text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-950"
           >
-            create an account
+            sign in
           </Link>
           .
         </p>
