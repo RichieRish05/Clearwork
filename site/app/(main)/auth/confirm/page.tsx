@@ -3,7 +3,6 @@ import { confirmReset } from "./actions";
 
 type SearchParams = Promise<{
   code?: string;
-  next?: string;
 }>;
 
 export default async function ConfirmPage({
@@ -13,7 +12,6 @@ export default async function ConfirmPage({
 }) {
   const params = await searchParams;
   const code = params.code ?? "";
-  const next = params.next ?? "/";
 
   const hasCode = Boolean(code);
 
@@ -51,7 +49,6 @@ export default async function ConfirmPage({
             className="mt-10 rounded-3xl border border-black bg-white p-7 shadow-[0_4px_0_0_rgba(0,0,0,1)]"
           >
             <input type="hidden" name="code" value={code} />
-            <input type="hidden" name="next" value={next} />
             <button
               type="submit"
               className="inline-flex w-full items-center justify-center rounded-full border border-black bg-black px-5 py-3 text-sm font-medium text-white shadow-[0_4px_0_0_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5"

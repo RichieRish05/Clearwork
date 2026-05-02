@@ -5,12 +5,11 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function confirmReset(formData: FormData) {
   const code = String(formData.get("code") ?? "");
-  const next = String(formData.get("next") ?? "/");
 
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) redirect(next);
+    if (!error) redirect("/auth/reset-password");
     console.error("auth/confirm exchangeCodeForSession failed:", error.message);
   }
 
