@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { Field } from "@/components/ui/field";
+import { GoogleButton } from "@/components/auth/google-button";
 import { signup } from "./actions";
 
 export default function SignupPage() {
@@ -78,6 +79,16 @@ export default function SignupPage() {
           >
             Submit application
           </button>
+
+          <div className="my-6 flex items-center gap-3">
+            <span className="h-px flex-1 bg-neutral-200" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-500">
+              or
+            </span>
+            <span className="h-px flex-1 bg-neutral-200" />
+          </div>
+
+          <GoogleButton />
 
           <p className="mt-5 text-center text-[11px] uppercase tracking-[0.2em] text-neutral-500 font-mono">
             By submitting you agree to our terms

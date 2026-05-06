@@ -5,12 +5,14 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { Field } from "@/components/ui/field";
+import { GoogleButton } from "@/components/auth/google-button";
 import { login } from "./actions";
 
 export default function LoginPage() {
   const [state, formAction] = useActionState(login, null);
   const searchParams = useSearchParams();
   const reset = searchParams.get("reset");
+  const oauthError = searchParams.get("error") === "oauth_failed";
   const [hashError, setHashError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -99,6 +101,11 @@ export default function LoginPage() {
           {hashError ? (
             <p className="mt-4 text-sm text-red-700">{hashError}</p>
           ) : null}
+          {oauthError ? (
+            <p className="mt-4 text-sm text-red-700">
+              We couldn't complete the Google sign-in. Please try again.
+            </p>
+          ) : null}
 
           <button
             type="submit"
@@ -106,6 +113,16 @@ export default function LoginPage() {
           >
             Sign in
           </button>
+
+          <div className="my-6 flex items-center gap-3">
+            <span className="h-px flex-1 bg-neutral-200" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-500">
+              or
+            </span>
+            <span className="h-px flex-1 bg-neutral-200" />
+          </div>
+
+          <GoogleButton />
         </form>
 
         <p className="mt-8 text-center text-sm text-neutral-700">
