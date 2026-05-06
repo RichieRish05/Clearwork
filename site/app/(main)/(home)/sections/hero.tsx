@@ -113,6 +113,7 @@ export function Hero() {
               alt="College journey illustration"
               fill
               priority
+              sizes="(min-width: 1024px) 560px, (min-width: 640px) 80vw, 100vw"
               className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.08)]"
             />
           </div>
