@@ -17,5 +17,5 @@ export async function login(
   });
   if (error) return { error: error.message };
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/dashboard");
 }

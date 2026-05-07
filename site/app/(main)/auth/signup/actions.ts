@@ -28,5 +28,5 @@ export async function signup(
   }
   if (!data.session) redirect("/auth/signup?status=check-email");
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/dashboard");
 }
