@@ -25,7 +25,20 @@ export async function updateSession(request: NextRequest) {
     },
   )
 
-  await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const PROTECTED_PREFIXES = ['/dashboard'] as const
+  const isProtected = PROTECTED_PREFIXES.some((p) =>
+    request.nextUrl.pathname.startsWith(p),
+  )
+
+  if (!user && isProtected) {
+    const loginUrl = request.nextUrl.clone()
+    loginUrl.pathname = '/auth/login'
+    return NextResponse.redirect(loginUrl)
+  }
 
   return response
 }

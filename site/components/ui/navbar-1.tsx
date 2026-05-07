@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react"
 import { Menu, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import type { User } from "@supabase/supabase-js"
 
 const NAV = [
   { label: "Pricing", href: "/#pricing" },
@@ -13,10 +14,21 @@ const NAV = [
   { label: "Guide", href: "/#guide" },
 ] as const
 
-const Navbar1 = () => {
+type Navbar1Props = {
+  user?: User | null
+}
+
+const Navbar1 = ({ user }: Navbar1Props) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleMenu = () => setIsOpen(!isOpen)
+
+  const desktopCta = user
+    ? { label: "Workspace", href: "/dashboard" }
+    : { label: "Get Started", href: "/auth/login" }
+  const mobileCta = user
+    ? { label: "Workspace", href: "/dashboard" }
+    : { label: "Get Started", href: "/auth/signup" }
 
   return (
     <div className="flex justify-center w-full py-6 px-4">
@@ -66,10 +78,10 @@ const Navbar1 = () => {
           whileHover={{ scale: 1.05 }}
         >
           <Link
-            href="/auth/login"
+            href={desktopCta.href}
             className="inline-flex items-center justify-center px-5 py-2 text-sm text-white bg-black rounded-full hover:bg-gray-800 transition-colors"
           >
-            Get Started
+            {desktopCta.label}
           </Link>
         </motion.div>
 
@@ -124,11 +136,11 @@ const Navbar1 = () => {
                 className="pt-6"
               >
                 <Link
-                  href="/auth/signup"
+                  href={mobileCta.href}
                   className="inline-flex items-center justify-center w-full px-5 py-3 text-base text-white bg-black rounded-full hover:bg-gray-800 transition-colors "
                   onClick={toggleMenu}
                 >
-                  Get Started
+                  {mobileCta.label}
                 </Link>
               </motion.div>
             </div>
