@@ -1,17 +1,17 @@
 "use client";
 
-import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Briefcase,
+  Award,
+  BookOpen,
   ChevronsUpDown,
+  GraduationCap,
   House,
+  MessageSquare,
   PanelLeft,
-  Plug,
-  Sparkles,
-  X,
+  Trophy,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 
@@ -32,9 +32,11 @@ import {
 
 const NAV_ITEMS = [
   { label: "Home", href: "/dashboard", icon: House },
-  { label: "Assistant", href: "/dashboard/assistant", icon: Sparkles },
-  { label: "Back Office", href: "/dashboard/back-office", icon: Briefcase },
-  { label: "Integrations", href: "/dashboard/integrations", icon: Plug },
+  { label: "Assistant", href: "/dashboard/assistant", icon: MessageSquare },
+  { label: "College List", href: "/dashboard/college-list", icon: GraduationCap },
+  { label: "Courses", href: "/dashboard/courses", icon: BookOpen },
+  { label: "Scholarship", href: "/dashboard/scholarship", icon: Award },
+  { label: "Activities", href: "/dashboard/activities", icon: Trophy },
 ] as const;
 
 type AppSidebarProps = {
@@ -44,7 +46,6 @@ type AppSidebarProps = {
 export function AppSidebar({ user }: AppSidebarProps) {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
-  const [planVisible, setPlanVisible] = React.useState(true);
 
   const fullName =
     (user.user_metadata?.full_name as string | undefined) ??
