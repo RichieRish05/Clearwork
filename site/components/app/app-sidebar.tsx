@@ -147,10 +147,11 @@ export function AppSidebar({ user }: AppSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter className="gap-2 px-3 pb-3 group-data-[collapsible=icon]:px-1.5">
-        <button
-          type="button"
+        <Link
+          href="/dashboard/account"
           className={cn(
             "group flex items-center gap-2.5 rounded-md px-1.5 py-1.5 text-left transition-colors hover:bg-neutral-200/50",
+            pathname === "/dashboard/account" && "bg-neutral-200/70",
             "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0",
           )}
         >
@@ -161,7 +162,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
             {fullName}
           </span>
           <ChevronsUpDown className="size-3.5 shrink-0 text-neutral-400 transition-colors group-hover:text-neutral-600 group-data-[collapsible=icon]:hidden" />
-        </button>
+        </Link>
       </SidebarFooter>
     </Sidebar>
   );

@@ -50,6 +50,12 @@ export default function SignupPage() {
           className="mt-10 rounded-3xl border border-black bg-white p-7 shadow-[0_4px_0_0_rgba(0,0,0,1)]"
         >
           <Field
+            label="Full name"
+            name="name"
+            placeholder="Eleanor Whitaker"
+            required
+          />
+          <Field
             label="Email"
             name="email"
             type="email"

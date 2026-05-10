@@ -13,7 +13,9 @@ export async function signup(
   const supabase = await createClient();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
-  const fullName = String(formData.get("name") ?? "");
+  const fullName = String(formData.get("name") ?? "").trim();
+
+  if (!fullName) return { error: "Name is required." };
 
   const { data, error } = await supabase.auth.signUp({
     email,
