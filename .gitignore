@@ -3,3 +3,4 @@ node_modules
 .next
 *.env
 .agents
+*.mcp.json

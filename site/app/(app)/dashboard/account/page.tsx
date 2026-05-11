@@ -1,8 +1,10 @@
+"use server";
+
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 
-import { AccountForms } from "./account-forms";
+import { ProfileCard } from "./profile-card";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -11,10 +13,6 @@ export default async function AccountPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
-  const meta = user.user_metadata ?? {};
-  const initialName =
-    (typeof meta.full_name === "string" ? meta.full_name : "") ||
-    (typeof meta.name === "string" ? meta.name : "");
   const hasPassword =
     user.identities?.some((identity) => identity.provider === "email") ?? false;
 
@@ -29,12 +27,8 @@ export default async function AccountPage() {
         </p>
       </header>
 
-      <div className="mt-8 flex max-w-2xl flex-col gap-6">
-        <AccountForms
-          initialName={initialName}
-          email={user.email ?? ""}
-          hasPassword={hasPassword}
-        />
+      <div className="flex max-w-2xl flex-col">
+        <ProfileCard />
       </div>
     </div>
   );

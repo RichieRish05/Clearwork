@@ -13,8 +13,7 @@ import {
   PanelLeft,
   Trophy,
 } from "lucide-react";
-import type { User } from "@supabase/supabase-js";
-
+import { useProfile } from "@/lib/profile/use-profile";
 import { cn } from "@/lib/utils";
 import {
   Sidebar,
@@ -39,26 +38,20 @@ const NAV_ITEMS = [
   { label: "Activities", href: "/dashboard/activities", icon: Trophy },
 ] as const;
 
-type AppSidebarProps = {
-  user: User;
-};
-
-export function AppSidebar({ user }: AppSidebarProps) {
+export function AppSidebar() {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
+  const { profile } = useProfile();
 
-  const fullName =
-    (user.user_metadata?.full_name as string | undefined) ??
-    (user.user_metadata?.name as string | undefined) ??
-    user.email ??
-    "Account";
+  const fullName = profile?.fullName ?? profile?.email ?? "Account";
 
-  const initials = fullName
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? "")
-    .join("") || "?";
+  const initials =
+    fullName
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? "")
+      .join("") || "?";
 
   return (
     <Sidebar
@@ -155,8 +148,18 @@ export function AppSidebar({ user }: AppSidebarProps) {
             "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0",
           )}
         >
-          <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-violet-500 via-fuchsia-500 to-orange-400 text-[11px] font-semibold text-white">
-            {initials}
+          <div className="relative flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-violet-500 via-fuchsia-500 to-orange-400 text-[11px] font-semibold text-white">
+            {profile?.avatarUrl ? (
+              <Image
+                src={profile.avatarUrl}
+                alt={fullName}
+                fill
+                sizes="28px"
+                className="object-cover"
+              />
+            ) : (
+              initials
+            )}
           </div>
           <span className="flex-1 truncate text-[13px] font-medium text-neutral-900 group-data-[collapsible=icon]:hidden">
             {fullName}
