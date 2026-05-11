@@ -21,6 +21,9 @@ async function profileFetcher(): Promise<Profile | null> {
     .select("full_name, avatar_url")
     .eq("id", user.id)
     .maybeSingle();
+  
+
+  console.log(user, data)
 
   return {
     id: user.id,

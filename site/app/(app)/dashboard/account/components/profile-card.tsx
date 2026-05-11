@@ -32,8 +32,8 @@ export function ProfileCard() {
   }
 
   return (
-    <section className="mt-8 rounded-2xl bg-white ring-1 ring-neutral-200/70">
-      <div className="px-6 py-5">
+    <section className="mt-6 w-full rounded-2xl bg-white ring-1 ring-neutral-200/70 sm:mt-8">
+      <div className="px-4 py-4 sm:px-6 sm:py-5">
         {editing ? (
           <form action={handleSave} className="space-y-4">
             <div>
@@ -50,10 +50,10 @@ export function ProfileCard() {
                 placeholder="Your name"
                 autoFocus
                 required
-                className="mt-2 h-11 rounded-xl px-4"
+                className="mt-2 h-11 w-full rounded-xl px-4"
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 type="submit"
                 disabled={saving}
@@ -73,20 +73,24 @@ export function ProfileCard() {
                 Cancel
               </Button>
               {error ? (
-                <span className="text-xs text-red-600">{error}</span>
+                <span className="w-full text-xs text-red-600 sm:w-auto">
+                  {error}
+                </span>
               ) : null}
             </div>
           </form>
         ) : (
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0 flex-1">
               <p className="text-xs text-neutral-500">Name</p>
-              <p className="mt-1 text-base text-neutral-900">{displayName}</p>
+              <p className="mt-1 truncate text-base text-neutral-900">
+                {displayName}
+              </p>
             </div>
             <button
               type="button"
               onClick={() => setEditing(true)}
-              className="text-sm font-medium text-neutral-900 hover:text-neutral-700"
+              className="shrink-0 text-sm font-medium text-neutral-900 hover:text-neutral-700"
             >
               Edit
             </button>
