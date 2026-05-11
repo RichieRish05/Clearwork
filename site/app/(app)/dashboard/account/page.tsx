@@ -13,9 +13,6 @@ export default async function AccountPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
-  const hasPassword =
-    user.identities?.some((identity) => identity.provider === "email") ?? false;
-
   return (
     <div className="flex flex-1 flex-col px-10 py-10">
       <header className="flex flex-col gap-1.5">
