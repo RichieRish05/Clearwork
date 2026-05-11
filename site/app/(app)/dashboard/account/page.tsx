@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 
-import { ProfileCard } from "./profile-card";
+import { ProfileCard } from "./components/profile-card";
 
 export default async function AccountPage() {
   const supabase = await createClient();
