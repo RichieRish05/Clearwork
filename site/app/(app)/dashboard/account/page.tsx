@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 
+import { LogoutButton } from "./components/logout-button";
 import { ProfileCard } from "./components/profile-card";
 
 export default async function AccountPage() {
@@ -14,9 +15,9 @@ export default async function AccountPage() {
   if (!user) redirect("/auth/login");
 
   return (
-    <div className="flex flex-1 flex-col px-10 py-10">
+    <div className="flex flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
       <header className="flex flex-col gap-1.5">
-        <h1 className="text-[28px] font-semibold tracking-tight text-neutral-900">
+        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-[28px]">
           Account
         </h1>
         <p className="text-sm text-neutral-500">
@@ -24,9 +25,8 @@ export default async function AccountPage() {
         </p>
       </header>
 
-      <div className="flex max-w-2xl flex-col">
-        <ProfileCard />
-      </div>
+      <ProfileCard />
+      <LogoutButton />
     </div>
   );
 }
