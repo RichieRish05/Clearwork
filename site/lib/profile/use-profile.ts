@@ -21,15 +21,21 @@ async function profileFetcher(): Promise<Profile | null> {
     .select("full_name, avatar_url")
     .eq("id", user.id)
     .maybeSingle();
-  
 
-  console.log(user, data)
+  const identities = (user.identities ?? []).map((identity) => ({
+    provider: identity.provider,
+    email:
+      (identity.identity_data?.email as string | undefined) ??
+      user.email ??
+      null,
+  }));
 
   return {
     id: user.id,
     email: user.email ?? null,
     fullName: data?.full_name ?? null,
     avatarUrl: data?.avatar_url ?? null,
+    identities,
   };
 }
 

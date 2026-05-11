@@ -1,18 +1,10 @@
 "use server";
 
-import { redirect } from "next/navigation";
-
-import { createClient } from "@/lib/supabase/server";
-
+import { ConnectedAccountsCard } from "./components/connected-accounts-card";
 import { LogoutButton } from "./components/logout-button";
 import { ProfileCard } from "./components/profile-card";
 
 export default async function AccountPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/login");
 
   return (
     <div className="flex flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
@@ -32,6 +24,13 @@ export default async function AccountPage() {
               Profile
             </h2>
             <ProfileCard />
+          </section>
+
+          <section>
+            <h2 className="text-lg mb-3 font-semibold text-neutral-900">
+              Connected Accounts
+            </h2>
+            <ConnectedAccountsCard />
           </section>
 
           <section>

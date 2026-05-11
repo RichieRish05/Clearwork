@@ -143,17 +143,13 @@ export function AppSidebar() {
           )}
         >
           <div className="relative flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-violet-500 via-fuchsia-500 to-orange-400 text-[11px] font-semibold text-white">
-            {profile?.avatarUrl ? (
-              <Image
-                src={profile.avatarUrl}
-                alt={fullName}
-                fill
-                sizes="28px"
-                className="object-cover"
-              />
-            ) : (
-              fullName
-            )}
+            <Image
+              src={"/circle.png"}
+              alt={fullName}
+              fill
+              sizes="28px"
+              className="object-cover"
+            />
           </div>
           <span className="flex-1 truncate text-[13px] font-medium text-neutral-900 group-data-[collapsible=icon]:hidden">
             {fullName}
