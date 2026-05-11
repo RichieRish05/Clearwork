@@ -45,13 +45,6 @@ export function AppSidebar() {
 
   const fullName = profile?.fullName ?? profile?.email ?? "Account";
 
-  const initials =
-    fullName
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase() ?? "")
-      .join("") || "?";
 
   return (
     <Sidebar
@@ -139,6 +132,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
+      {profile && 
       <SidebarFooter className="gap-2 px-3 pb-3 group-data-[collapsible=icon]:px-1.5">
         <Link
           href="/dashboard/account"
@@ -158,7 +152,7 @@ export function AppSidebar() {
                 className="object-cover"
               />
             ) : (
-              initials
+              fullName
             )}
           </div>
           <span className="flex-1 truncate text-[13px] font-medium text-neutral-900 group-data-[collapsible=icon]:hidden">
@@ -166,7 +160,8 @@ export function AppSidebar() {
           </span>
           <ChevronsUpDown className="size-3.5 shrink-0 text-neutral-400 transition-colors group-hover:text-neutral-600 group-data-[collapsible=icon]:hidden" />
         </Link>
-      </SidebarFooter>
+      </SidebarFooter>}
+
     </Sidebar>
   );
 }

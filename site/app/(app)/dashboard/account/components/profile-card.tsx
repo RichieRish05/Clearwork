@@ -12,7 +12,10 @@ export function ProfileCard() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const displayName = profile?.fullName?.trim() || "Add your name";
+  if (!profile) return null;
+
+  const displayName = profile?.fullName?.trim();
+
 
   async function handleSave(formData: FormData) {
     const next = String(formData.get("fullName") ?? "");
