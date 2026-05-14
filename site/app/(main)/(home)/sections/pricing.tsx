@@ -11,53 +11,57 @@ type Tier = {
   blurb: string;
   color: string;
   features: string[];
+  cta: string;
   featured?: boolean;
 };
 
 const TIERS: Tier[] = [
   {
-    name: "Early Decision",
-    italic: "Foundation",
-    price: "$49",
-    cadence: "/ month",
-    blurb: "For families just beginning the journey. Lay the groundwork early.",
+    name: "Starter",
+    italic: "Free",
+    price: "$0",
+    cadence: "forever",
+    blurb: "Ship your first card today. Tiers watermark in the corner.",
     color: "#0f4d92",
+    cta: "Start free",
     features: [
-      "AI mentor matched to your child",
-      "Course & extracurricular planning",
-      "Quarterly progress reviews",
-      "Parent dashboard",
+      "1 live pricing widget",
+      "3 templates to fork",
+      "Stripe Checkout sync",
+      "Basic view & click tracking",
     ],
   },
   {
-    name: "Regular Decision",
-    italic: "Acceptance",
-    price: "$129",
+    name: "Pro",
+    italic: "Ship",
+    price: "$24",
     cadence: "/ month",
-    blurb: "Our most-chosen plan. Everything you need from junior year onward.",
+    blurb: "For the solo founder shipping in public. Unlimited everything that matters.",
     color: "#8c1515",
     featured: true,
+    cta: "Start a 14-day trial",
     features: [
-      "Everything in Foundation",
-      "Unlimited essay drafting & revision",
-      "School list strategy & fit analysis",
-      "Mock interviews with feedback",
-      "Application timeline orchestration",
+      "Unlimited widgets, unlimited variants",
+      "A/B tests on price, copy, layout",
+      "Full conversion analytics",
+      "Custom domain, no watermark",
+      "Webhook events to your stack",
     ],
   },
   {
-    name: "Restrictive",
-    italic: "Ivy League",
-    price: "$329",
+    name: "Scale",
+    italic: "Print",
+    price: "$96",
     cadence: "/ month",
-    blurb: "White-glove counsel for students aiming at the top eight and beyond.",
+    blurb: "For the team whose pricing page is now the product.",
     color: "#e77500",
+    cta: "Talk to us",
     features: [
-      "Everything in Acceptance",
-      "Dedicated human counselor sessions",
-      "Portfolio & supplement architect",
-      "Alumni interview prep",
-      "Priority response, 24/7",
+      "Everything in Ship",
+      "Bayesian winner declaration",
+      "Multi-currency & geo routing",
+      "Team seats with roles",
+      "Priority response, white-glove migration",
     ],
   },
 ];
@@ -70,20 +74,20 @@ export function Pricing() {
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeader
-          kicker="No. 01 — Tuition"
+          kicker="No. 01 — Pricing"
           title={
             <>
-              Tuition that{" "}
+              Pricing that{" "}
               <span
                 className="italic font-normal"
                 style={{ color: "#8c1515" }}
               >
-                pays itself back
+                practices what it preaches
               </span>
               .
             </>
           }
-          sub="Three plans. One acceptance letter. Cancel any term, no penalty, no hard feelings."
+          sub="Three plans. Test every one of them against each other if you'd like — we won't take it personally."
         />
 
         <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
@@ -114,9 +118,7 @@ export function Pricing() {
               )}
 
               <div className="flex items-baseline gap-2">
-                <span
-                  className="font-serif text-2xl text-neutral-950"
-                >
+                <span className="font-serif text-2xl text-neutral-950">
                   {tier.name}
                 </span>
                 <span
@@ -156,14 +158,14 @@ export function Pricing() {
               </ul>
 
               <a
-                href="#"
+                href="/auth/signup"
                 className={`mt-8 inline-flex items-center justify-center rounded-full border border-black px-5 py-3 text-sm font-medium transition-transform hover:-translate-y-0.5 ${
                   tier.featured
                     ? "bg-black text-white shadow-[0_4px_0_0_rgba(0,0,0,1)]"
                     : "bg-white text-neutral-950 shadow-[0_3px_0_0_rgba(0,0,0,1)]"
                 }`}
               >
-                Begin {tier.italic}
+                {tier.cta}
               </a>
             </motion.div>
           ))}
@@ -172,4 +174,3 @@ export function Pricing() {
     </section>
   );
 }
-

@@ -2,15 +2,16 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 
-const SCHOOLS = [
-  { name: "Cornell", color: "#0f4d92" },
-  { name: "Berkeley", color: "#003262" },
-  { name: "Stanford", color: "#8c1515" },
-  { name: "Harvard", color: "#a51c30" },
-  { name: "Princeton", color: "#e77500" },
-  { name: "Columbia", color: "#1d4f91" },
+const VERBS = [
+  { name: "convert", color: "#0f4d92" },
+  { name: "compound", color: "#003262" },
+  { name: "scale", color: "#8c1515" },
+  { name: "click", color: "#a51c30" },
+  { name: "stick", color: "#e77500" },
+  { name: "pay rent", color: "#1d4f91" },
 ] as const;
 
 const ROTATE_MS = 2500;
@@ -20,17 +21,16 @@ export function Hero() {
 
   React.useEffect(() => {
     const id = window.setInterval(
-      () => setIndex((i) => (i + 1) % SCHOOLS.length),
+      () => setIndex((i) => (i + 1) % VERBS.length),
       ROTATE_MS,
     );
     return () => window.clearInterval(id);
   }, []);
 
-  const current = SCHOOLS[index];
+  const current = VERBS[index];
 
-  // Measure the widest school name to keep layout stable across rotations.
   const widestCh = React.useMemo(
-    () => Math.max(...SCHOOLS.map((s) => s.name.length)),
+    () => Math.max(...VERBS.map((s) => s.name.length)),
     [],
   );
 
@@ -52,13 +52,13 @@ export function Hero() {
               variants={lineVariants}
               className="block"
             >
-              Help your kid
+              Pricing cards
             </motion.span>
             <motion.span
               variants={lineVariants}
               className="block"
             >
-              land
+              that
               <span
                 className="relative inline-block align-baseline ml-3 sm:ml-4"
                 style={{ minWidth: `${widestCh}ch` }}
@@ -73,7 +73,7 @@ export function Hero() {
                     className="italic font-normal inline-block"
                     style={{ color: current.color }}
                   >
-                    {current.name}
+                    {current.name}.
                   </motion.span>
                 </AnimatePresence>
 
@@ -87,10 +87,30 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-7 max-w-xl mx-auto lg:mx-0 text-base sm:text-l leading-relaxed"
           >
-            One-on-one mentorship from AI agents that run circles around overpriced 
-            college admissions counselors. Essays that sound like your child. 
-            A roadmap from freshman year to acceptance day.
+            Drop a Stripe-connected pricing widget on your site in five minutes.
+            Pick from templates that already convert. A/B test every tier,
+            every word, every dollar &mdash; and watch what sticks.
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-8 flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3"
+          >
+            <Link
+              href="/auth/signup"
+              className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-neutral-950 rounded-full hover:bg-neutral-800 transition-colors"
+            >
+              Start free
+            </Link>
+            <Link
+              href="/auth/signup"
+              className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-neutral-900 rounded-full border border-neutral-300 hover:bg-neutral-100 transition-colors"
+            >
+              See templates
+            </Link>
+          </motion.div>
         </div>
 
         {/* Image */}

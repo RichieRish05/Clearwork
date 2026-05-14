@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-
 import { AppSidebar } from "@/components/app/app-sidebar";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";

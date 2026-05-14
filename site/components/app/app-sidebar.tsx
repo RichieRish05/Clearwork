@@ -4,14 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Award,
-  BookOpen,
   ChevronsUpDown,
-  GraduationCap,
   House,
-  MessageSquare,
+  LayoutGrid,
+  LineChart,
   PanelLeft,
-  Trophy,
+  Plug,
+  Sparkles,
 } from "lucide-react";
 import { useProfile } from "@/lib/profile/use-profile";
 import { cn } from "@/lib/utils";
@@ -31,11 +30,10 @@ import {
 
 const NAV_ITEMS = [
   { label: "Home", href: "/dashboard", icon: House },
-  { label: "Assistant", href: "/dashboard/assistant", icon: MessageSquare },
-  { label: "College List", href: "/dashboard/college-list", icon: GraduationCap },
-  { label: "Courses", href: "/dashboard/courses", icon: BookOpen },
-  { label: "Scholarship", href: "/dashboard/scholarship", icon: Award },
-  { label: "Activities", href: "/dashboard/activities", icon: Trophy },
+  { label: "Widgets", href: "/dashboard/widgets", icon: LayoutGrid },
+  { label: "Templates", href: "/dashboard/templates", icon: Sparkles },
+  { label: "Analytics", href: "/dashboard/analytics", icon: LineChart },
+  { label: "Integrations", href: "/dashboard/integrations", icon: Plug },
 ] as const;
 
 export function AppSidebar() {

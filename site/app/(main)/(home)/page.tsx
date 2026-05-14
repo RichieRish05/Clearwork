@@ -17,8 +17,6 @@ export default async function Home() {
       <main className="relative w-full flex flex-1 flex-col">
         <Hero />
         <Pricing />
-        <Blog />
-        <Guide />
       </main>
     </div>
   );
