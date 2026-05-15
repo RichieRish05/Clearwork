@@ -1,5 +1,3 @@
-import { Blog } from "@/app/(main)/(home)/sections/blog";
-import { Guide } from "@/app/(main)/(home)/sections/guide";
 import { Hero } from "@/app/(main)/(home)/sections/hero";
 import { Navbar1 } from "@/components/ui/navbar-1";
 import { Pricing } from "@/app/(main)/(home)/sections/pricing";
