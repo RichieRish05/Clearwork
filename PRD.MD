@@ -1,410 +1,479 @@
-# Pricing Card Component — Product Requirements Document (V1)
+# Clearwork — Product Requirements Document
 
-**Version:** 1.0
-**Status:** Ready to build
-**Audience:** Engineering (Claude Code, dev team)
-
----
-
-## 1. One-line summary
-
-Connect Stripe once, build pricing cards in a central dashboard, embed them on your site, and see exactly how each card performs — impressions, hovers, clicks, checkout completions, all in one view.
-
-Edit pricing once in the dashboard, every embed across every page updates automatically. No code changes. No redeploys. No engineering required.
+**Version:** 0.1 (MVP scope)
+**Status:** Draft for founding team review
+**Author:** Founding team
+**Last updated:** May 2026
 
 ---
 
-## 2. Scope
+## 1. Summary
 
-### 2.1 In scope for V1
+Clearwork is a client management platform for solo creative freelancers — wedding photographers, designers, planners, copywriters, coaches — who want HoneyBook's workflow without HoneyBook's financial risk.
 
-- Stripe OAuth connection with bidirectional product and price sync
-- Visual card builder in central dashboard — multiple cards per account, one source of truth
-- Embed via script tag, React component, or hosted page
-- Edit-once-update-everywhere: changing a card in the dashboard updates every embed of that card instantly
-- Per-card analytics: impressions, tier-level hovers, tier-level clicks, checkout completions
-- Funnel visualization per card: impression → hover → click → checkout
-- Lightweight A/B toggle: assign 2 card variants to the same embed URL, 50/50 traffic split
+The core differentiator is that **Clearwork never holds client money**. Payments flow directly from the client's card to the freelancer's own Stripe account. This eliminates the chargeback claw-back and merchant-of-record disputes that drive the loudest negative reviews of incumbent tools.
 
-### 2.2 Explicitly out of scope (V2+)
-
-- Multivariate testing, sequential testing, statistical significance handling
-- Benchmark dataset across customers / aggregate intelligence
-- AI-driven recommendations or plan-structure auditing
-- Multi-processor support (Paddle, Lemon Squeezy, Polar) — Stripe only in V1
-- Competitor pricing tracking
-- Geographic price localization beyond Stripe's native multi-currency
-- Micro-surveys, abandonment recovery emails, behavioral re-engagement
-- Components beyond the pricing card (FAQ, comparison tables, etc.)
-
-The discipline of holding the line on 2.2 is what makes V1 shippable in 3 months instead of 9.
+The MVP targets one user persona, one workflow, and one wedge. Everything else is post-MVP.
 
 ---
 
-## 3. Moat thesis
+## 2. Goals and non-goals
 
-The moat is Senja-shaped: multiple embeds across a customer's marketing site, all pointing at hosted card configurations we control. Three dynamics:
+### Goals (what we ship)
 
-**Embed proliferation.** A typical SaaS marketing site has pricing in more places than the founder realizes: pricing page, homepage CTA, comparison page, upgrade prompts on feature pages, campaign landing pages. Each becomes another embed. By embed #3, switching means editing three places in production code.
+- Let a solo creative run an entire client engagement end-to-end without leaving the product: inquiry → proposal → contract → payment → delivery → final invoice.
+- Maintain the "we never touch your money" wedge through Stripe Connect Express, with the freelancer as the account holder of record.
+- Get a new user to "first invoice sent" in under 30 minutes, including Stripe onboarding.
+- Achieve a flat, transparent price below HoneyBook's $36/mo Starter tier.
 
-**Central source-of-truth becomes load-bearing.** When the founder wants to raise prices, run a promo, change tier names, or update feature lists, their muscle memory is "open the dashboard." Stripe Pricing Table can only show what's in Stripe — it can't model the marketing context (tier names different from Stripe product names, feature lists, badges, promotional copy).
+### Non-goals (what we explicitly do not ship in v1)
 
-**Real-customer-interaction asset (the v0/21st.dev test).** A design tool can clone the card UI in an afternoon. It cannot clone the impressions, hovers, clicks, and checkout completions accumulated from real visitors on the customer's production marketing site. That data is the asset.
-
----
-
-## 4. Core user flows
-
-### 4.1 First-time setup (target: <5 minutes)
-
-1. Sign up with email or Google
-2. Connect Stripe via OAuth (one click)
-3. Dashboard auto-detects existing Stripe products and offers a starter card layout
-4. Customize card: tier names, feature lists, colors (auto-pulled from brand site URL), badges
-5. Copy embed snippet
-6. Paste into site (Webflow, Framer, Next.js, WordPress, plain HTML)
-7. Card live, analytics start collecting on first impression
-
-### 4.2 Ongoing workflow (the load-bearing one)
-
-1. Founder wants to change pricing or copy
-2. Open dashboard, edit card
-3. Save
-4. Every embed of that card updates instantly across the site
-5. Analytics show before/after impact on conversion
-
-### 4.3 Lightweight A/B (the soft experimentation feature)
-
-1. Founder has a card live and wants to test an alternative
-2. Duplicate the card, edit the duplicate (different price, copy, layout)
-3. Toggle on "split test" — pair the two cards on the same embed URL
-4. 50/50 traffic split, sticky per-visitor
-5. Analytics view shows both cards side-by-side with the same funnel metrics
-6. Founder makes the call manually — no automated significance, no statistical engine
+- Team / multi-user features
+- General-purpose CRM (contact database beyond projects)
+- Email marketing or broadcast tools
+- Project management (tasks, Gantt, time tracking)
+- Bookkeeping or sales tax compliance
+- AI features of any kind
+- Mobile native apps (mobile-responsive web only)
+- White-label client portals (paid upgrade later)
+- Multi-currency (USD only at launch)
 
 ---
 
-## 5. Feature detail
+## 3. Target user
 
-### 5.1 Stripe integration
+### Primary persona
 
-- OAuth Connect for read/write access to customer's Stripe account
-- Auto-sync: products, prices, currencies, billing intervals, trial periods
-- Display (but not creation in V1) of metered/usage-based plans
-- Bidirectional sync: edit price in our dashboard → updates in Stripe; edit price in Stripe → syncs back to our dashboard
-- Webhook listeners for real-time sync
-- Test mode toggle that mirrors Stripe test mode
-- Handle multiple currencies on a single product (Stripe supports this natively)
-- Surface Stripe errors clearly (e.g., "This price has active subscriptions and can't be modified")
+**Sasha, the solo creative freelancer.** Income $40K–$150K/year. Runs everything herself. Books 10–60 client engagements per year. Already uses HoneyBook, Dubsado, or a duct-taped combination of Google Docs + Stripe + Calendly + Gmail.
 
-### 5.2 Card builder
+Specific sub-segments at launch:
 
-**Visual editing:**
+- Wedding and portrait photographers
+- Independent brand and web designers
+- Wedding planners and event coordinators
+- Coaches and consultants who run multi-session engagements
+- Copywriters and content strategists
 
-- Drag-and-drop tier ordering
-- Tier name override ("Pro" in marketing card vs "professional-plan-v2" in Stripe)
-- Feature list editing with checkmark/X/highlight markers
-- Badges per tier: Most Popular, Best Value, Coming Soon, custom
-- Strikethrough pricing for promotional anchoring
-- CTA button text and destination URL per tier
-- Annual/monthly toggle with savings auto-calculation
+### What this user values
 
-**Visual styling:**
+1. Looking professional to their clients without spending hours configuring tools.
+2. Getting paid promptly and predictably.
+3. Not being surprised by their software (clawbacks, hidden fees, sudden price hikes, support that doesn't reply).
+4. Aesthetic quality of anything their client sees.
 
-- Brand color extraction from a URL (paste customer's site, auto-pull primary/accent/background colors)
-- Manual override for all colors, fonts, radii, shadows, spacing
-- Light/dark mode toggle and auto-detect
-- Card layouts: 2-tier, 3-tier, 4-tier, comparison-grid, single-tier-with-features
-- Mobile responsive by default — every layout works on mobile without configuration
+### What this user does not value (and we should not optimize for)
 
-**Output:**
-
-- Live preview matches embed exactly
-- Mobile/tablet/desktop preview toggles
-- Accessibility: WCAG AA contrast checking on every save
-
-### 5.3 Embedding
-
-- Script tag embed (primary path) — single line, async, non-blocking
-- React component via npm package (for technical users)
-- Hosted standalone page on subdomain (for founders without a site yet)
-- Custom domain support on paid plans
-- Integration guides: Webflow, Framer, WordPress, Next.js, Carrd, plain HTML
-- Embed code includes a unique card ID — multiple embeds of the same card share analytics; different cards report separately
-- Shadow DOM isolation so customer site CSS can't break the card and vice versa
-- Performance budget: <20kb gzipped, <100ms time to first meaningful paint, zero Cumulative Layout Shift
-
-### 5.4 Analytics
-
-**Events captured per card:**
-
-- `impression` — card entered visitor's viewport
-- `tier_hover` — visitor hovered on a specific tier for >500ms
-- `tier_click` — visitor clicked the CTA on a specific tier
-- `checkout_complete` — visitor completed Stripe Checkout for a tier (matched via Stripe webhook)
-
-**Dashboard views per card:**
-
-- **Summary table:** impressions, total clicks, total checkouts, top-converting tier
-- **Funnel viz:** impression → hover → click → checkout, with drop-off % at each step
-- **Per-tier breakdown:** hovers and clicks per tier, with hover-but-didn't-click as the headline actionable metric
-- **Time-series:** daily/weekly conversion rate over time
-- **A/B comparison view (when split testing is on):** both cards side-by-side, same funnel metrics for direct comparison
-
-**Data, retention, and privacy:**
-
-- All events tied to anonymous visitor ID (no PII)
-- Sticky visitor ID for A/B variant assignment (first-party cookie or localStorage)
-- GDPR-compliant by default: no fingerprinting, no third-party cookies
-- Retention: 12 months on paid plans, 90 days on free
-
-### 5.5 Lightweight A/B toggle
-
-This is intentionally simple. It's not a testing engine. It's a coin flip with analytics.
-
-- Pair any two cards as A/B variants for a single embed URL
-- 50/50 split, sticky per visitor (same visitor sees the same variant on return)
-- Analytics view shows both cards' funnel metrics side-by-side
-- **No automated winner detection.** Founder looks at the numbers and decides.
-- **No statistical significance handling.** Known limitation in V1. Surface raw numbers and a sample-size warning when below threshold ("This is based on 47 visitors — wait for more data before deciding").
-- **Pricing-safe by default:** if A and B have different prices, both visitors who convert are charged the price they saw. No "winning price applied retroactively" mechanic in V1.
+- Deep customization or workflow flexibility (that's Dubsado's lane)
+- Reporting and analytics
+- Integrations with tools they don't already use
+- Mobile-first usage patterns
 
 ---
 
-## 6. Technical architecture
+## 4. The wedge, in product terms
 
-### 6.1 Stack recommendation
+Every Clearwork screen should make the trust position visible without harping on it. Three concrete commitments:
 
-- **Frontend (dashboard):** Next.js + TypeScript + Tailwind + shadcn/ui
-- **Embed runtime:** Vanilla TypeScript compiled to a single bundle, wrapped in a custom element with Shadow DOM. No React in the embed.
-- **Backend:** Next.js API routes for V1 (simple, deployable, fast). Move to dedicated service if/when event volume warrants.
-- **Database:** Postgres for relational data (accounts, cards, variants, embeds, configs). Consider Neon or Supabase for managed Postgres.
-- **Event ingestion:** Start with direct Postgres writes via a lightweight API endpoint. Migrate to a queue (Inngest, Trigger.dev, or similar) when impression volume exceeds ~1M/day.
-- **Analytics queries:** Postgres materialized views for V1. Move to ClickHouse or Tinybird when query latency becomes a problem (likely month 12+).
-- **Auth:** Clerk or Supabase Auth. Don't roll your own.
-- **Hosting:** Vercel for the dashboard + API. Cloudflare or similar CDN for the embed bundle.
+1. **Payments flow through Stripe Connect Express**, with the freelancer as the connected account holder. Clearwork is never the merchant of record.
+2. **Funds settle directly to the freelancer's bank account** via their own Stripe balance, on Stripe's payout schedule. Clearwork has no payout authority.
+3. **Clearwork cannot reverse, hold, or freeze payments.** Disputes are handled directly between the freelancer and Stripe, exactly as if the freelancer had a standalone Stripe account.
 
-### 6.2 Data model (core entities)
+This must be reflected in product copy at three specific touchpoints: Stripe onboarding, the invoice paid screen, and the marketing site. Everywhere else it stays implicit.
 
-```
-accounts
-  - id, email, stripe_account_id (OAuth), plan_tier, created_at
+---
 
-stripe_products
-  - id, account_id, stripe_product_id, name, last_synced_at
-  - (cached from Stripe, kept in sync via webhook)
+## 5. Functional requirements
 
-stripe_prices
-  - id, account_id, stripe_price_id, product_id, unit_amount, currency,
-    recurring_interval, trial_period_days, last_synced_at
+Each requirement is tagged **P0** (must ship for MVP), **P1** (ship in v1.1, plan data model for now), or **P2** (defer past v1).
 
-cards
-  - id, account_id, name, layout, theme_config (JSON), created_at, updated_at
-  - (theme_config holds colors, fonts, radii, etc.)
+### 5.1 Authentication and accounts
 
-card_tiers
-  - id, card_id, position, name, stripe_price_id, features (JSON array),
-    badge, cta_text, cta_url, strikethrough_price
+| ID | Requirement | Priority |
+|---|---|---|
+| AUTH-1 | Sign up with email + password | P0 |
+| AUTH-2 | Sign up with Google OAuth | P0 |
+| AUTH-3 | Forgot password flow with email reset | P0 |
+| AUTH-4 | One user per account (no teams in MVP) | P0 |
+| AUTH-5 | Account deletion with data export | P1 |
+| AUTH-6 | Two-factor authentication | P2 |
 
-card_variants
-  - id, card_id, ab_partner_id (nullable, references another card), traffic_split
-  - (when ab_partner_id is set on both cards, they form an A/B pair)
+### 5.2 Onboarding
 
-embeds
-  - id, account_id, card_id, embed_token (public, used in script tag),
-    referrer_domain, created_at, last_seen_at
+| ID | Requirement | Priority |
+|---|---|---|
+| ONB-1 | First-run flow with 4 steps: business profile, template selection, Stripe (optional/deferred), calendar (optional) | P0 |
+| ONB-2 | User can skip Stripe at onboarding and connect later from any payment-related action | P0 |
+| ONB-3 | Pre-flight screen before Stripe handoff explaining what they'll need (SSN/EIN, bank info, ID) | P0 |
+| ONB-4 | Resumable Stripe onboarding via fresh account links if user abandons mid-flow | P0 |
+| ONB-5 | Template selection by vertical (wedding photography, brand design, coaching, copywriting, event planning) — each ships 3–4 starter smart files | P0 |
+| ONB-6 | Skip-all option for users who want to start from scratch | P1 |
 
-events
-  - id, embed_id, card_id, variant_id, visitor_id, event_type,
-    tier_id (nullable), occurred_at, metadata (JSON)
-  - (event_type: impression | tier_hover | tier_click | checkout_complete)
+### 5.3 Client pipeline (the dashboard)
 
-stripe_checkout_matches
-  - id, account_id, stripe_checkout_session_id, embed_id, card_id,
-    variant_id, visitor_id, matched_at
-  - (matches checkout_complete events back to the originating card)
-```
+| ID | Requirement | Priority |
+|---|---|---|
+| PIPE-1 | Default view: 4-column kanban — Inquiry, Proposal sent, Booked, Wrapping | P0 |
+| PIPE-2 | List view as an alternative layout | P1 |
+| PIPE-3 | Each card shows project name, client name, amount, status pills (paid / awaiting / signed) | P0 |
+| PIPE-4 | Drag-and-drop between columns to update status | P0 |
+| PIPE-5 | Automatic status progression based on document state (proposal sent → moves to Proposal sent column) | P0 |
+| PIPE-6 | Filter by status, date range, or search by client name | P1 |
+| PIPE-7 | Inline "new project" creation directly from the pipeline | P0 |
+| PIPE-8 | Archive completed projects (not delete — retain for tax/audit) | P0 |
 
-### 6.3 Embed-to-checkout attribution
+### 5.4 Project (the unit of work)
 
-Critical for the funnel viz. Flow:
+| ID | Requirement | Priority |
+|---|---|---|
+| PROJ-1 | Each project belongs to one client and contains: smart files, messages, calendar events, files, activity timeline | P0 |
+| PROJ-2 | Project header shows status, total value, payments received, next action | P0 |
+| PROJ-3 | Activity timeline auto-logs every state change (sent, viewed, signed, paid) with timestamp | P0 |
+| PROJ-4 | Manual note-adding to timeline | P1 |
+| PROJ-5 | Multiple smart files per project (e.g., proposal + change order) | P1 |
+| PROJ-6 | Project tags for categorization | P2 |
 
-1. Visitor clicks a tier CTA on an embed
-2. Embed appends `?_card=<embed_token>&_v=<visitor_id>` to the CTA URL (or sets via Stripe Checkout `client_reference_id`)
-3. Stripe Checkout session created with `client_reference_id` containing card + visitor info
-4. Stripe webhook fires on `checkout.session.completed`
-5. We parse `client_reference_id`, write `stripe_checkout_matches` row, fire `checkout_complete` event
+### 5.5 Client management
 
-For cases where the founder uses Stripe Checkout directly via a custom checkout URL: provide a JS helper that wraps the Stripe.js call and injects `client_reference_id`.
+| ID | Requirement | Priority |
+|---|---|---|
+| CLI-1 | Client = name, email, phone, address, notes | P0 |
+| CLI-2 | One client can have multiple projects | P0 |
+| CLI-3 | Client receives all communication via email — no client account or login | P0 |
+| CLI-4 | Magic-link authentication for client portal (token in URL, no password) | P0 |
+| CLI-5 | Client list view (separate from projects) | P1 |
+| CLI-6 | Duplicate detection on client email | P0 |
 
-### 6.4 Embed bundle
+### 5.6 Smart files (the differentiated feature)
 
-- Single JS file served from CDN, cached aggressively
-- Versioned URL (e.g., `/embed/v1/loader.js`) so we can roll forward without breaking existing embeds
-- Custom element registration: `<pricing-card data-token="..."></pricing-card>`
-- Shadow DOM for style isolation
-- Fetches card config from API on mount, renders, hydrates analytics
-- Lazy-load any non-critical features (A/B sticky assignment can use localStorage synchronously)
-- All API calls go through a single endpoint that returns config + assigns variant in one round trip
+| ID | Requirement | Priority |
+|---|---|---|
+| SF-1 | Block-based document editor with the following block types: cover image, heading, text, package selection, pricing table, contract terms, signature, payment, file upload, questionnaire | P0 |
+| SF-2 | All blocks are drag-to-reorder | P0 |
+| SF-3 | Templates can be saved and reused across projects | P0 |
+| SF-4 | Merge fields for client name, project date, fee, business name | P0 |
+| SF-5 | Send via email with magic link to client portal view | P0 |
+| SF-6 | Track viewed / opened / signed / paid states per block | P0 |
+| SF-7 | Client-facing view is mobile-responsive and matches freelancer's brand colors (basic theme: 1 color + logo) | P0 |
+| SF-8 | Smart file PDF export for archival | P1 |
+| SF-9 | Versioning: when a sent smart file is edited, client sees the latest version with a note | P1 |
+| SF-10 | Conditional logic (show this block if client selected option X) | P2 |
 
-### 6.5 Performance budgets (hard gates)
+### 5.7 Proposals and packages
 
-- Embed bundle size: <20kb gzipped
-- Time to first meaningful paint: <100ms after script loads
-- Time to interactive: <300ms
-- Cumulative Layout Shift: 0
-- No render-blocking on customer site
-- Lighthouse score on customer site must not drop more than 2 points from baseline
+| ID | Requirement | Priority |
+|---|---|---|
+| PROP-1 | Package selection block: client picks from 1–N predefined packages, selection updates downstream pricing | P0 |
+| PROP-2 | Add-on items the client can toggle | P1 |
+| PROP-3 | Quantity adjustment on line items | P1 |
+| PROP-4 | Expiration date on proposals | P1 |
+| PROP-5 | Pricing in USD only at launch | P0 |
 
-### 6.6 Key technical decisions to lock early
+### 5.8 Contracts and e-signature
 
-- **Variant assignment: server-side.** Avoid the flicker that client-side A/B tools have. The single config-fetch endpoint returns the assigned variant's full config.
-- **Visitor ID: first-party cookie with localStorage fallback.** No fingerprinting, no third-party identifiers.
-- **Stripe sync: webhook-driven + periodic reconciliation.** Webhooks are primary; a daily reconciliation job catches missed events.
-- **Multi-tenant data isolation: row-level security in Postgres.** Every query scoped by `account_id`. Use Postgres RLS or enforce in the data access layer.
-- **Embed config caching: edge cache with revalidation on dashboard save.** Edits should propagate within <30 seconds globally.
+| ID | Requirement | Priority |
+|---|---|---|
+| SIGN-1 | Legally binding e-signature compliant with ESIGN Act and UETA (US) | P0 |
+| SIGN-2 | Audit trail: signer IP, timestamp, user agent, document hash | P0 |
+| SIGN-3 | Both freelancer and client signatures supported on same document | P0 |
+| SIGN-4 | Signed document immutability — locked once both parties sign | P0 |
+| SIGN-5 | Use Dropbox Sign or HelloSign API for v1 (avoid building e-sign primitives), with own infrastructure as P2 | P0 |
+| SIGN-6 | Email notifications on signature completion to both parties | P0 |
+| SIGN-7 | Signed PDF copy attached to email | P0 |
+
+### 5.9 Payments
+
+| ID | Requirement | Priority |
+|---|---|---|
+| PAY-1 | Stripe Connect Express integration — freelancer is the account holder | P0 |
+| PAY-2 | Onboarding handoff to Stripe via OAuth-like flow with pre-filled email | P0 |
+| PAY-3 | Client pays via Stripe Checkout (hosted page) — funds settle to freelancer's Stripe balance | P0 |
+| PAY-4 | Card payments only at launch (Visa, Mastercard, Amex, Discover) | P0 |
+| PAY-5 | ACH support | P1 |
+| PAY-6 | Payment plans: 50/50, 30/30/40, custom schedules | P0 |
+| PAY-7 | Recurring monthly retainer invoicing | P1 |
+| PAY-8 | Save card on file for split payments | P1 |
+| PAY-9 | Refund initiation by freelancer through Clearwork UI (executes via Stripe API) | P0 |
+| PAY-10 | Application fee: 0% — Clearwork takes no transaction cut | P0 |
+| PAY-11 | "Mark as paid manually" option for users who collect via check, Zelle, etc. | P0 |
+| PAY-12 | Non-payment tier: full product usage without Stripe connection, including PDF invoices with freelancer's bank details | P0 |
+
+### 5.10 Invoicing
+
+| ID | Requirement | Priority |
+|---|---|---|
+| INV-1 | Generate invoice with line items, tax line, payment terms, due date | P0 |
+| INV-2 | Invoice number auto-generated, customizable prefix | P0 |
+| INV-3 | Email invoice with payment link | P0 |
+| INV-4 | Invoice statuses: draft, sent, viewed, paid, overdue | P0 |
+| INV-5 | Overdue reminders auto-sent at 1, 7, 14 days past due (toggleable) | P0 |
+| INV-6 | Tax line as percentage rate (no tax compliance product — just math) | P0 |
+| INV-7 | PDF invoice with freelancer branding | P0 |
+| INV-8 | CSV export of all invoices for accountant handoff | P0 |
+| INV-9 | QuickBooks Online sync | P2 |
+
+### 5.11 Lead capture
+
+| ID | Requirement | Priority |
+|---|---|---|
+| LEAD-1 | Embeddable HTML form with custom fields | P0 |
+| LEAD-2 | New form submission creates a project in Inquiry status | P0 |
+| LEAD-3 | Email notification to freelancer on new inquiry | P0 |
+| LEAD-4 | Anti-spam: hCaptcha or similar | P0 |
+| LEAD-5 | Plugins for Squarespace, Wix, WordPress | P1 |
+| LEAD-6 | Auto-responder email to lead | P0 |
+
+### 5.12 Calendar and scheduling
+
+| ID | Requirement | Priority |
+|---|---|---|
+| CAL-1 | Google Calendar two-way sync (read availability, write events) | P0 |
+| CAL-2 | Booking page with availability windows | P0 |
+| CAL-3 | Multiple event types (consultation, kickoff call, shoot, delivery) | P0 |
+| CAL-4 | Buffer time and minimum notice settings | P0 |
+| CAL-5 | Auto-create video link (Google Meet) on book | P0 |
+| CAL-6 | Outlook / Apple Calendar sync | P1 |
+| CAL-7 | Reschedule by client without freelancer intervention | P0 |
+| CAL-8 | Embed bookable calendar inside smart file | P1 |
+
+### 5.13 Messaging
+
+| ID | Requirement | Priority |
+|---|---|---|
+| MSG-1 | Per-project message thread between freelancer and client | P0 |
+| MSG-2 | Freelancer composes from Clearwork — client receives email | P0 |
+| MSG-3 | Client replies via email — reply lands in Clearwork thread | P0 |
+| MSG-4 | File attachments up to 25MB | P0 |
+| MSG-5 | Read receipts | P1 |
+| MSG-6 | Internal notes (not visible to client) | P0 |
+
+### 5.14 Client portal
+
+| ID | Requirement | Priority |
+|---|---|---|
+| PORT-1 | Single URL per project, magic-link access from email | P0 |
+| PORT-2 | Client sees: active smart files, payment history, message thread, scheduled events | P0 |
+| PORT-3 | Branded with freelancer's logo and 1 accent color | P0 |
+| PORT-4 | Mobile-responsive | P0 |
+| PORT-5 | Custom subdomain (yourbusiness.clearwork.com) | P1 |
+| PORT-6 | Custom domain (clients.yourbusiness.com) | P2 |
+
+### 5.15 Workflows and automations
+
+| ID | Requirement | Priority |
+|---|---|---|
+| AUTO-1 | Library of 6–8 pre-built automations, toggleable per project | P0 |
+| AUTO-2 | Core automations: "On proposal accepted → send contract"; "On contract signed → send deposit invoice"; "On deposit paid → send onboarding email"; "On final delivery → send final invoice"; "7 days post-final-payment → send review request" | P0 |
+| AUTO-3 | Custom email templates inside each automation | P0 |
+| AUTO-4 | Visual automation builder | P2 |
+
+### 5.16 Templates
+
+| ID | Requirement | Priority |
+|---|---|---|
+| TPL-1 | User-saved smart file templates | P0 |
+| TPL-2 | User-saved email templates for messaging | P0 |
+| TPL-3 | Starter library by vertical (5 verticals at launch, 3–4 templates each) | P0 |
+| TPL-4 | Community template gallery | P2 |
+
+---
+
+## 6. Non-functional requirements
+
+### 6.1 Performance
+
+- Pipeline screen loads in <1.5 seconds for accounts with up to 200 active projects.
+- Smart file editor changes save within 500ms (auto-save, no save button).
+- Stripe Checkout redirect completes within 2 seconds.
+- Email delivery to client: under 30 seconds from send action.
+
+### 6.2 Reliability
+
+- 99.5% uptime target for v1. Stripe outages do not block document workflows.
+- All client-facing magic links remain valid for 90 days from issue.
+- Daily database backups, 30-day retention.
+
+### 6.3 Security
+
+- All data encrypted at rest (AES-256) and in transit (TLS 1.3).
+- No payment card data ever touches Clearwork servers (Stripe handles).
+- Magic-link tokens single-use for sensitive actions (signing, paying); reusable for viewing.
+- Audit log of all freelancer actions for 1 year.
+
+### 6.4 Compliance
+
+- ESIGN Act and UETA compliance for e-signatures (achieved via Dropbox Sign API at v1).
+- SOC 2 Type 1 certification target within 12 months of launch.
+- GDPR data export and deletion endpoints (even though target market is US — table stakes).
+- 1099-K handling: not applicable to Clearwork, as funds never settle in Clearwork accounts. Each freelancer's Stripe account handles its own 1099-K independently.
+
+### 6.5 Accessibility
+
+- WCAG 2.1 AA conformance for client-facing pages (portal, payment pages, signed docs).
+- Keyboard navigation throughout freelancer app.
 
 ---
 
 ## 7. Pricing
 
-| Plan    | Price    | Included                                                                                                                                                |
-| ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Free    | $0       | 1 card, basic analytics (30-day retention), branded watermark, 10K impressions/mo                                                                       |
-| Starter | $19/mo   | 3 cards, no watermark, full analytics (12-month retention), 100K impressions/mo, lightweight A/B (2 variants per card)                                  |
-| Growth  | $49/mo   | Unlimited cards, unlimited impressions, custom domain on hosted pages, priority Stripe sync, A/B on every card, CSV export of analytics                 |
+### 7.1 MVP pricing
 
-### 7.1 LTD launch
+**Single plan at $19/mo or $190/year** (~17% annual discount).
 
-AppSumo LTD at $69 one-time (Starter equivalent) and $149 one-time (Growth equivalent, stackable codes). Target: 1,000+ codes, 4.7+ star rating.
+Includes everything: unlimited projects, unlimited clients, unlimited smart files, Stripe Connect, no transaction fees, all integrations.
 
-### 7.2 What we don't charge
+### 7.2 Why one plan
 
-- **Zero transaction fees ever.** Marketing weapon against PriceWell and Priceable.
-- No per-user fees within a workspace
-- No charge for additional embed locations once on a paid plan
+Hill playbook: avoid the multi-tier complexity that makes incumbents feel grabby. Aggressive simplicity is part of the brand promise. We can introduce a higher tier later (custom domains, removing Clearwork branding from client portal) once the product earns it.
+
+### 7.3 LTD structure (launch lever)
+
+Run a 6-week private LTD before public launch:
+
+- **$249 lifetime deal** via AppSumo and direct.
+- Excludes: custom domains, future white-label features.
+- Caps: 100 projects/year per LTD account (heavy users upgrade).
+- Hard exclusions: any future high-COGS features (AI, SMS reminders) gated to paid tiers.
+
+Target: 500 LTDs at $249 = $125K. Funds engineering for v1.1.
 
 ---
 
 ## 8. Success metrics
 
-### 8.1 North star
+### 8.1 North-star metric
 
-**Active embeds:** cards that have served 100+ impressions in the last 30 days. Not signups, not trials. Real traffic on real customer sites.
+**Weekly active accounts that sent at least one invoice in the past 30 days.**
 
-### 8.2 Phase milestones
+This filters out signups who never engaged and trial-extenders who never adopted.
 
-| Milestone           | Active embeds | MRR  | What's true                                                  |
-| ------------------- | ------------- | ---- | ------------------------------------------------------------ |
-| Month 3 (V1 launch) | 200           | $2K  | V1 live, first 100 paying customers, content engine started  |
-| Month 4 (AppSumo)   | 800           | $5K  | LTD launch complete, $50K+ in one-time revenue               |
-| Month 9             | 2,500         | $18K | Content/SEO compounding, LTD users converting to recurring   |
-| Month 12            | 4,500         | $30K | V2 scoping begins (experimentation depth, multi-processor)   |
+### 8.2 Leading indicators
 
-### 8.3 Leading indicators
+| Metric | Target at 6 months |
+|---|---|
+| Signup → first proposal sent | >40% within 24 hours |
+| First proposal → first invoice sent | >60% within 14 days |
+| First invoice → first payment received | >70% within 30 days |
+| Stripe onboarding completion (of users who start) | >75% |
+| Free trial → paid conversion | >25% |
+| Monthly churn (paid accounts) | <4% |
 
-- Signup → Stripe connect: 60%+
-- Stripe connect → first embed live: 50%+
-- **First embed live → second embed within 30 days: 40%+** (the moat-forming metric — track from customer #1)
-- Free → paid conversion: 8%+
-- Paid retention at 90 days: 85%+
+### 8.3 Qualitative success
 
----
-
-## 9. Build sequence (Months 1–3)
-
-### Month 1: Foundation
-
-- Auth, account model, billing infrastructure (Clerk + Stripe billing for our own subscriptions)
-- Stripe OAuth Connect for customer accounts
-- Stripe product/price sync (webhook listener + initial sync on connect)
-- Card data model (cards, tiers, variants, embeds, events)
-- Basic card builder UI (functional, not pretty yet)
-- Basic embed script that fetches config and renders a card
-- Postgres schema with row-level security
-
-### Month 2: Polish and analytics
-
-- Visual card builder polish: brand color extraction, layout options, badges, feature lists, drag-and-drop
-- Event ingestion endpoint (impression/hover/click)
-- Stripe webhook listener for checkout completion attribution
-- Analytics dashboard: summary, funnel viz, per-tier breakdown, time-series
-- Embed performance optimization (Shadow DOM, gzip <20kb, lazy loading)
-- Hosted standalone page on subdomain
-- Integration guides for Webflow, Framer, WordPress, Next.js, Carrd
-
-### Month 3: A/B + launch prep
-
-- Lightweight A/B toggle: pair variants, sticky assignment via cookie, side-by-side analytics
-- Sample-size warnings in A/B view
-- Marketing site (built with our own product on the pricing page — eat our own dog food)
-- 10 SEO articles published (see section 11)
-- Onboarding email sequence
-- Soft launch to early-access waitlist, gather first 100 customers
-- AppSumo LTD submission for month 4 launch
+NPS above 60 within 6 months. Hill's stated benchmark for a "promising signal" product is NPS ~85; that's aspirational v2.
 
 ---
 
-## 10. Competitive positioning
+## 9. Launch plan
 
-| Competitor             | What they do                                                                | Where we win in V1                                                                                                                                                                                  |
-| ---------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Stripe Pricing Table   | Free embeddable pricing table tied to Stripe products                       | Better visual design, brand auto-detection, per-card analytics, marketing-context fields (tier names, badges, feature lists separate from Stripe product names), lightweight A/B. Stripe has none. |
-| PriceWell              | Embeddable Stripe pricing tables with basic A/B testing; ~1% transaction fee | Flat-fee pricing (no transaction cut), better analytics granularity (tier-level hovers + funnel viz), faster setup                                                                                  |
-| Priceable              | Zero-code Stripe pricing tables, real-time A/B price testing, 1% fee        | Same as PriceWell — flat fee, better analytics, better visual builder                                                                                                                               |
-| Hand-built React/Webflow | Custom-coded components wired to Stripe Checkout                          | Non-technical founders can't do this at all. Technical founders save time and get free analytics.                                                                                                   |
+### 9.1 Phase 0 — Customer validation (weeks 1–4)
 
-**One-sentence positioning:** the only pricing card tool that combines visual quality, central source-of-truth editing, and per-card analytics — with flat-fee pricing and no transaction tax on customer revenue.
+- 20 interviews with current HoneyBook and Dubsado users.
+- Specific question: "What's the worst thing your client management software has done to you?"
+- Validate the wedge: "If a tool let your client pay directly into your own Stripe instead of holding the money, would you switch?"
+- Identify the strongest sub-vertical (probably wedding photographers or brand designers).
 
----
+### 9.2 Phase 1 — Private LTD launch (weeks 5–20)
 
-## 11. Go-to-market (for context, not for engineering)
+- Build through P0 features in the priority order from §10.
+- Soft launch to a closed list of 200 early adopters recruited from interviews.
+- LTD at $249 to fund development. Target: 500 sales over 6 weeks.
+- Iterate based on feedback before public launch.
 
-Primary channel: content + SEO from day one. Content clusters:
+### 9.3 Phase 2 — Public launch (week 21+)
 
-- "[SaaS Brand] pricing page teardown" posts — long tail, branded queries
-- "How to price a SaaS [category]"
-- "Stripe Pricing Table alternatives"
-- "[Competitor A] vs [Competitor B] pricing"
+- AppSumo listing for broader LTD distribution.
+- Subscription pricing live for non-LTD users.
+- Content engine kicks in: "Switching from HoneyBook" guides, "How to set up Stripe Connect" walkthroughs, vertical-specific resources (wedding photographer pricing templates, etc.).
+- Reddit, Facebook groups for creative freelancers, photographer forums, designer Slacks.
 
-Secondary: AppSumo LTD launch in month 4. Reddit + IndieHackers presence. Twitter build-in-public.
+### 9.4 Phase 3 — V1.1 (months 6–12)
 
-We ship our own pricing card on our pricing page. Every experiment we run becomes a case study. Every conversion lift becomes content.
-
----
-
-## 12. Risks
-
-| Risk                                                              | Likelihood | Mitigation                                                                                                                                                                                                                |
-| ----------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Founders only embed one card; moat doesn't form                   | Medium     | Onboarding emphasizes multi-embed scenarios. In-app prompts suggest second-embed use cases. Track second-embed rate as primary leading indicator.                                                                          |
-| Stripe ships a better Pricing Table                               | Low–Med    | V2 multi-processor makes us neutral above payments. Analytics + marketing-context fields are the moat Stripe won't bother with.                                                                                            |
-| PriceWell or Priceable drops transaction fees in response          | Medium     | They've built revenue model around transaction fees; abandoning is painful. By the time they do, we have analytics + brand. Out-execute on UX.                                                                             |
-| Embed performance issues damage trust                             | Low        | Strict performance budget. Lighthouse score gating on every release. Real-user performance monitoring on customer embeds.                                                                                                  |
-| A/B without significance handling produces bad decisions          | Medium     | Surface sample size prominently. Soft warning below threshold. Educational content on when to call a test.                                                                                                                |
-| Non-technical founders can't get embed code into their site       | Medium     | Platform-specific guides (Webflow, Framer especially). Live chat during onboarding for paid users. Hosted page fallback for founders without an editable site builder.                                                     |
+- P1 features prioritized by usage data and customer requests.
+- Likely top of list: recurring billing, second vertical templates, mobile polish, QuickBooks CSV export refinement.
 
 ---
 
-## 13. Open questions to resolve during build
+## 10. Build sequence
 
-1. Should the lightweight A/B toggle ship in V1 or fast-follow in month 4? Argument for V1: competitive positioning vs PriceWell. Argument for fast-follow: it's the most complex piece and slipping it lets us launch sooner.
-2. Should free tier include analytics, or be purely a "try the embed" tier? Analytics gating is the most natural paywall but might gate the magic moment.
-3. Hosted page domain: subdomain (`cards.ourapp.com/customername`) or custom domain on paid only?
-4. Webflow plugin vs generic embed first? Webflow gives distribution but locks in single-platform investment for V1.
-5. Do we need a "connect non-Stripe checkout" escape hatch? Some founders use Gumroad, Lemon Squeezy, or custom checkout. V1 forces them to wait for V2 multi-processor.
+The four-person team (per Hill's standard formation: 2 founders + 2 hires, design + engineering heavy) builds in this order.
+
+### Weeks 1–4: Wedge proof
+
+- Auth (AUTH-1, AUTH-2, AUTH-3)
+- Stripe Connect Express integration (PAY-1, PAY-2, PAY-3, PAY-10)
+- Bare-bones invoice generation and send (INV-1, INV-3, INV-4)
+- Magic-link client view of one invoice
+- Project model and basic pipeline (PROJ-1, PIPE-1, PIPE-7)
+
+**Milestone:** A freelancer can sign up, connect Stripe, send an invoice, and a real client can pay it. Money lands in the freelancer's Stripe. This validates the wedge end-to-end before anything else exists.
+
+### Weeks 5–8: The booking flow
+
+- Proposals and package selection (PROP-1, SF-1 partial)
+- Contract and e-signature via Dropbox Sign API (SIGN-1 through SIGN-7)
+- Calendar booking with Google Calendar sync (CAL-1, CAL-2, CAL-3, CAL-5)
+- Client portal first version (PORT-1, PORT-2, PORT-3)
+
+**Milestone:** A freelancer can win a project — send proposal, get it accepted, get contract signed, book a kickoff call, collect deposit.
+
+### Weeks 9–12: The unified workflow
+
+- Smart file block editor (SF-1 through SF-7)
+- Templates per vertical (TPL-3 for first 2 verticals: photography and brand design)
+- Messaging (MSG-1 through MSG-4)
+- Lead capture form (LEAD-1, LEAD-2, LEAD-3)
+- Workflow automations library (AUTO-1, AUTO-2)
+
+**Milestone:** Full inquiry-to-paid loop works in one tool. Private beta opens.
+
+### Weeks 13–20: Polish and LTD launch
+
+- Onboarding flow (ONB-1 through ONB-5)
+- Pipeline polish (PIPE-3, PIPE-5, PIPE-8)
+- Payment plans (PAY-6, PAY-11)
+- Email deliverability hardening
+- Mobile responsive QA across all client-facing pages
+- LTD purchase flow and AppSumo integration
+- Marketing site
+
+**Milestone:** Public LTD launch.
 
 ---
 
-## 14. Instructions for Claude Code
+## 11. Risks and open questions
 
-When implementing this PRD:
+### 11.1 Risks
 
-- Start with the data model (section 6.2) and Stripe OAuth (section 5.1). Get a card config persisting and a Stripe product syncing before touching UI.
-- Build the embed runtime in isolation. Treat it as a separate package/workspace. It should have its own bundle, its own tests, and no shared code with the dashboard beyond TypeScript types for the card config.
-- Performance budgets (section 6.5) are non-negotiable. Add bundle-size and Lighthouse checks to CI from day one.
-- Use Stripe test mode for all development. Never hit live Stripe accounts during development.
-- Analytics ingestion must handle 100x current expected load before launch. Premature optimization on the dashboard is bad; premature scale-readiness on event ingestion is good.
-- Row-level security on every Postgres table. Every query must include `account_id` scoping.
-- Webhook handlers must be idempotent. Stripe will retry; we will sometimes process the same event twice.
-- Default to shipping the simplest thing that works. The 9 items in section 2.2 are explicitly out of scope. Do not build them, do not stub them, do not add hooks for them. V2 is V2's problem.
+| Risk | Mitigation |
+|---|---|
+| Stripe Connect onboarding drop-off kills activation | Defer Stripe to in-flow workflow step, not signup. Offer no-payment tier. |
+| HoneyBook responds with their own "we don't hold money" feature | They can't — it would cannibalize their float and merchant-of-record revenue. Their architecture is built around being MOR. |
+| E-signature legal compliance bugs create real liability | Use Dropbox Sign API at v1 — let them own that compliance surface. Build proprietary later. |
+| Wedding photographers and other verticals have niche workflows we don't support | Pick 1 vertical for deep validation. Use the first 100 customers' feedback to shape v1.1. |
+| Email deliverability problems erode client trust | Use a transactional provider (Postmark/SendGrid) with dedicated IPs. Configure DKIM/SPF/DMARC per sender domain. |
+| LTD support burden becomes unsustainable | Cap projects/year on LTD. Explicit policy that LTD does not include 1-on-1 support, only community + docs. |
+
+### 11.2 Open questions
+
+1. **Which vertical to anchor the launch?** Wedding photography is the obvious choice (largest segment, loudest HoneyBook hatred) but brand designers may convert faster. Decision should follow Phase 0 interviews.
+2. **Should the non-payment tier be free, or same price?** Argument for free: lowers acquisition friction. Argument for same price: avoids cannibalizing paid signups. Lean toward same price — value isn't in the Stripe integration alone.
+3. **How aggressive on AI marketing?** "No AI" as a brand positioning could resonate strongly in 2026 (per the AI-refugee thesis), but might age poorly. Test in messaging without committing to product positioning.
+4. **What's the exit story for stuck LTD users?** If someone exceeds the 100-projects/year cap, what's the upgrade path? Decide before LTD launch.
+
+---
+
+## 12. Appendix
+
+### 12.1 Out of scope for this PRD
+
+- Mobile native apps (planned for year 2)
+- International expansion (USD only at launch)
+- Marketplace / vendor referral features (long-term thought, not v1)
+- Public API (long-term)
+
+### 12.2 Glossary
+
+- **Smart file:** A single scrollable document combining proposal, package selection, contract, signature, and payment. Modeled after HoneyBook's pattern; the differentiated feature.
+- **Wedge:** The "we never touch your money" positioning, enabled by Stripe Connect Express.
+- **Magic link:** Token-in-URL authentication for client portal access. No client account or password required.
+- **LTD:** Lifetime deal. One-time payment for ongoing access, used to fund early development and recruit early adopters (per Hill playbook).

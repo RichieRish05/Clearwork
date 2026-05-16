@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Product context
 
-The directory name is `CollegeConsulting`, but the product has pivoted (commit `710132f`) to **Tiers** — a Stripe-connected pricing-widget builder for solo founders. `PRD.MD` at the repo root is the V1 spec; consult it before making product-shaped decisions. Don't rename anything based on the old framing.
+This is **Clearwork** — a client-management platform for solo creative freelancers (HoneyBook competitor). The product wedge is "**we never touch your money**": payments flow directly to each user's Stripe Connect Express account, and Clearwork is never the merchant of record. `PRD.MD` at the repo root is the V1 spec — consult it before making product-shaped decisions, especially around the wedge (§4) and the P0/P1/P2 priority tags in §5.
+
+The repo previously held two earlier framings (CollegeConsulting → Tiers → Clearwork). Leftover copy may exist (e.g. signup page still says "Office of Admissions"); don't treat that as canonical product copy. Don't rename anything based on the old framings.
 
 ## Working directory
 
@@ -36,8 +38,8 @@ The single most likely place to trip: **this repo uses `proxy.ts` with `export a
 
 ### Route groups split the app into two shells
 
-- `site/app/(main)/` — public marketing site + auth pages. Layout adds the `GridPattern` background; pages use `Navbar1`. Includes `/` (home with `Hero` and `Pricing` sections) and all `/auth/*` routes.
-- `site/app/(app)/` — authenticated app shell. Layout wraps children in `SidebarProvider` + `AppSidebar` + `TooltipProvider`. Currently holds `/dashboard` and its sub-pages: `widgets`, `templates`, `analytics`, `integrations`, `account`.
+- `site/app/(main)/` — public marketing site + auth pages. Layout adds the `GridPattern` background. Includes `(home)/` (landing page with `Hero`, `Wedge`, `Workflow`, `Pricing` sections) and all `/auth/*` routes.
+- `site/app/(app)/` — authenticated app shell. Layout wraps children in `SWRProvider` + `TooltipProvider` + `SidebarProvider` + `AppSidebar`. Currently holds `/dashboard` and its sub-pages: `widgets`, `templates`, `analytics`, `integrations`, `account`.
 
 The root `site/app/layout.tsx` only sets up fonts (Geist Sans, Geist Mono, Instrument Serif — exposed as `--font-sans`, `--font-mono`, `--font-serif`/`--font-heading`) and the html shell. The two route-group layouts are where the actual chrome lives.
 
@@ -59,13 +61,20 @@ Client-side reads + mutations follow the shape in `site/lib/profile/`:
 2. `use-profile.ts` is a `useSWR` hook that fetches via the browser Supabase client and exposes a mutator (`updateName`) that calls the server action with `optimisticData` + `rollbackOnError`.
 3. `actions.ts` is `"use server"` — it validates, mutates via the server Supabase client (so RLS applies to the signed-in user), then `revalidatePath()` to refresh server-rendered consumers.
 
-Reuse this shape for new entities. The optimistic update is the load-bearing UX detail.
+The `(app)` layout wraps everything in `SWRProvider`, which disables `revalidateOnFocus`, `revalidateOnReconnect`, `revalidateIfStale`, and retries — so SWR keys are effectively immutable until a mutation. Plan reads with that in mind.
+
+Reuse this hook+actions shape for new entities. The optimistic update is the load-bearing UX detail.
 
 ### Data layer (Drizzle + Supabase Postgres)
 
-- Schema: `site/lib/db/schema.ts`. Note the `pgSchema("auth").table("users", ...)` declaration — that's a typed handle on Supabase's auth.users (read-only from this codebase). App tables go in the default `public` schema; `drizzle.config.ts` filters to public so introspection won't fight auth.
+- Schema: `site/lib/db/schema.ts`. Note the `pgSchema("auth").table("users", ...)` declaration — that's a typed handle on Supabase's `auth.users` (read-only from this codebase). App tables go in the default `public` schema; `drizzle.config.ts` filters to public so introspection won't fight auth.
+- Current tables: `profiles` (1:1 with `auth.users`), `stripe_connections` (1:1, holds the Connect Express OAuth tokens), `stripe_products` and `stripe_prices` (mirror of Stripe-side records, keyed by `userId` + Stripe ID with a unique index).
 - DB client: `site/lib/db/index.ts` exposes `db` (postgres-js + drizzle) using `DATABASE_URL`. Note `{ prepare: false }` — required for Supabase's pgbouncer transaction pooler.
 - Migrations: written to `site/drizzle/` (gitignored until generated). Use `db:push` for fast iteration during development; switch to `db:generate` + `db:migrate` once schemas stabilize.
+
+### Stripe Connect (the wedge)
+
+Per PRD §4 and PAY-1/PAY-2/PAY-10: Clearwork uses Stripe Connect Express with the freelancer as the connected account holder, takes 0% application fee, and never settles funds in its own account. The `stripe_connections` table is where the OAuth tokens live; treat its existence (a row for the signed-in user) as the source of truth for "is this user payments-ready." Any future server action that hits Stripe on a user's behalf must read that user's `accessToken` and act on their account — never a platform-level key.
 
 ### Styling
 
