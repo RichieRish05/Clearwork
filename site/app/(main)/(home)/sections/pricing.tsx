@@ -3,66 +3,63 @@
 import { motion } from "motion/react";
 import { SectionHeader } from "./section-header";
 
-type Tier = {
+type Plan = {
   name: string;
   italic: string;
   price: string;
   cadence: string;
+  cadenceSub?: string;
   blurb: string;
   color: string;
   features: string[];
+  fineprint?: string;
   cta: string;
+  ribbon?: string;
   featured?: boolean;
 };
 
-const TIERS: Tier[] = [
+const PLANS: Plan[] = [
   {
-    name: "Starter",
-    italic: "Free",
-    price: "$0",
-    cadence: "forever",
-    blurb: "Ship your first card today. Tiers watermark in the corner.",
+    name: "Clearwork",
+    italic: "the plan",
+    price: "$19",
+    cadence: "/ month",
+    cadenceSub: "or $190 / year",
+    blurb:
+      "Everything you need to run client work end-to-end. One plan, no surprises.",
     color: "#0f4d92",
-    cta: "Start free",
-    features: [
-      "1 live pricing widget",
-      "3 templates to fork",
-      "Stripe Checkout sync",
-      "Basic view & click tracking",
-    ],
-  },
-  {
-    name: "Pro",
-    italic: "Ship",
-    price: "$24",
-    cadence: "/ month",
-    blurb: "For the solo founder shipping in public. Unlimited everything that matters.",
-    color: "#8c1515",
     featured: true,
-    cta: "Start a 14-day trial",
+    cta: "Start free trial",
     features: [
-      "Unlimited widgets, unlimited variants",
-      "A/B tests on price, copy, layout",
-      "Full conversion analytics",
-      "Custom domain, no watermark",
-      "Webhook events to your stack",
+      "Unlimited projects & clients",
+      "Unlimited smart files, contracts, invoices",
+      "Stripe Connect Express — 0% transaction fee",
+      "Google Calendar + magic-link client portal",
+      "Email templates and 5 vertical starter kits",
+      "Manual & mark-as-paid invoices (Stripe optional)",
     ],
+    fineprint: "14-day trial. Cancel any time. Stripe's own processing fees apply.",
   },
   {
-    name: "Scale",
-    italic: "Print",
-    price: "$96",
-    cadence: "/ month",
-    blurb: "For the team whose pricing page is now the product.",
-    color: "#e77500",
-    cta: "Talk to us",
+    name: "Founding seat",
+    italic: "lifetime",
+    price: "$249",
+    cadence: "one time",
+    cadenceSub: "Only 500 seats at launch",
+    blurb:
+      "Lock in early. One payment, ongoing access while the product evolves.",
+    color: "#8c1515",
+    ribbon: "Early access",
+    cta: "Claim a seat",
     features: [
-      "Everything in Ship",
-      "Bayesian winner declaration",
-      "Multi-currency & geo routing",
-      "Team seats with roles",
-      "Priority response, white-glove migration",
+      "Everything in the monthly plan",
+      "Locked-in core feature set, forever",
+      "Up to 100 active projects per year",
+      "Direct line to the founders' inbox",
+      "Excludes future white-label & high-COGS features",
     ],
+    fineprint:
+      "Funds the first year of engineering. Capped on volume; heavy users upgrade.",
   },
 ];
 
@@ -70,30 +67,30 @@ export function Pricing() {
   return (
     <section
       id="pricing"
-      className="relative w-full px-6 sm:px-10 lg:px-16 pt-24 sm:pt-32 pb-24"
+      className="relative w-full px-6 sm:px-10 lg:px-16 pt-24 sm:pt-28 pb-24 scroll-mt-24"
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-5xl">
         <SectionHeader
-          kicker="No. 01 — Pricing"
+          kicker="No. 03 — Pricing"
           title={
             <>
-              Pricing that{" "}
+              One plan. One promise.{" "}
               <span
                 className="italic font-normal"
-                style={{ color: "#8c1515" }}
+                style={{ color: "#0f4d92" }}
               >
-                practices what it preaches
-              </span>
-              .
+                Zero
+              </span>{" "}
+              transaction fees.
             </>
           }
-          sub="Three plans. Test every one of them against each other if you'd like — we won't take it personally."
+          sub="Below HoneyBook's Starter tier. Above HoneyBook's pain threshold. The lifetime option funds development and gets you in before the price moves."
         />
 
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-          {TIERS.map((tier, i) => (
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+          {PLANS.map((plan, i) => (
             <motion.div
-              key={tier.name}
+              key={plan.name}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
@@ -103,54 +100,61 @@ export function Pricing() {
                 ease: [0.22, 1, 0.36, 1],
               }}
               className={`relative flex flex-col rounded-3xl border border-black bg-white p-8 ${
-                tier.featured
-                  ? "shadow-[0_8px_0_0_rgba(0,0,0,1)] md:-translate-y-3"
+                plan.featured
+                  ? "shadow-[0_8px_0_0_rgba(0,0,0,1)] md:-translate-y-2"
                   : "shadow-[0_4px_0_0_rgba(0,0,0,1)]"
               }`}
             >
-              {tier.featured && (
+              {plan.ribbon && (
                 <span
                   aria-hidden
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-black bg-white px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-neutral-950 shadow-[0_2px_0_0_rgba(0,0,0,1)]"
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-black bg-white px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-neutral-950 shadow-[0_2px_0_0_rgba(0,0,0,1)]"
                 >
-                  Most chosen
+                  {plan.ribbon}
                 </span>
               )}
 
               <div className="flex items-baseline gap-2">
                 <span className="font-serif text-2xl text-neutral-950">
-                  {tier.name}
+                  {plan.name}
                 </span>
                 <span
                   className="font-serif italic text-2xl"
-                  style={{ color: tier.color }}
+                  style={{ color: plan.color }}
                 >
-                  / {tier.italic}
+                  / {plan.italic}
                 </span>
               </div>
 
               <p className="mt-3 text-sm leading-relaxed text-neutral-700">
-                {tier.blurb}
+                {plan.blurb}
               </p>
 
-              <div className="mt-6 flex items-end gap-1">
+              <div className="mt-6 flex items-end gap-2">
                 <span className="font-serif text-6xl leading-none text-neutral-950">
-                  {tier.price}
+                  {plan.price}
                 </span>
-                <span className="pb-2 text-sm text-neutral-600">
-                  {tier.cadence}
-                </span>
+                <div className="flex flex-col pb-1 leading-tight">
+                  <span className="text-sm text-neutral-600">
+                    {plan.cadence}
+                  </span>
+                  {plan.cadenceSub && (
+                    <span className="text-[11px] text-neutral-500">
+                      {plan.cadenceSub}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <div className="mt-6 h-px w-full bg-neutral-200" />
 
               <ul className="mt-6 space-y-3 text-sm text-neutral-800">
-                {tier.features.map((f) => (
+                {plan.features.map((f) => (
                   <li key={f} className="flex gap-3">
                     <span
                       aria-hidden
                       className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: tier.color }}
+                      style={{ background: plan.color }}
                     />
                     <span>{f}</span>
                   </li>
@@ -160,15 +164,40 @@ export function Pricing() {
               <a
                 href="/auth/signup"
                 className={`mt-8 inline-flex items-center justify-center rounded-full border border-black px-5 py-3 text-sm font-medium transition-transform hover:-translate-y-0.5 ${
-                  tier.featured
+                  plan.featured
                     ? "bg-black text-white shadow-[0_4px_0_0_rgba(0,0,0,1)]"
                     : "bg-white text-neutral-950 shadow-[0_3px_0_0_rgba(0,0,0,1)]"
                 }`}
               >
-                {tier.cta}
+                {plan.cta}
               </a>
+
+              {plan.fineprint && (
+                <p className="mt-4 text-[11px] leading-relaxed text-neutral-500">
+                  {plan.fineprint}
+                </p>
+              )}
             </motion.div>
           ))}
+        </div>
+
+        <div className="mt-14 rounded-2xl border border-neutral-200 bg-white/60 backdrop-blur px-6 py-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-neutral-500">
+                Not ready for Stripe?
+              </p>
+              <p className="mt-1 text-sm text-neutral-800">
+                Use the full product without connecting Stripe. Send PDF invoices with your bank details and mark them paid manually.
+              </p>
+            </div>
+            <a
+              href="/auth/signup"
+              className="self-start sm:self-auto inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-neutral-900 rounded-full border border-neutral-300 hover:bg-neutral-100 transition-colors whitespace-nowrap"
+            >
+              Start without Stripe
+            </a>
+          </div>
         </div>
       </div>
     </section>

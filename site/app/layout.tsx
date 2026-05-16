@@ -20,9 +20,9 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Tiers — Pricing cards that pay rent.",
+  title: "Clearwork — Client management that never touches your money.",
   description:
-    "A Stripe-connected pricing widget for solo founders. Pick a template, tune your tiers, and A/B test what converts.",
+    "Inquiries to invoices in one tool for solo creative freelancers. Payments flow directly to your Stripe — Clearwork can't hold, freeze, or claw back a cent.",
 };
 
 export default function RootLayout({
