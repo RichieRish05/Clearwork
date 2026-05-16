@@ -63,7 +63,7 @@ Client-side reads + mutations follow the shape in `site/lib/profile/`:
 
 The `(app)` layout wraps everything in `SWRProvider`, which disables `revalidateOnFocus`, `revalidateOnReconnect`, `revalidateIfStale`, and retries — so SWR keys are effectively immutable until a mutation. Plan reads with that in mind.
 
-Reuse this hook+actions shape for new entities. The optimistic update is the load-bearing UX detail.
+Reuse this hook+actions shape for new entities. The optimistic update is the load-bearing UX detail. See "Backend stays in Next.js" below for the deps-as-args refinement that keeps each domain module portability-ready.
 
 ### Data layer (Drizzle + Supabase Postgres)
 
@@ -75,6 +75,39 @@ Reuse this hook+actions shape for new entities. The optimistic update is the loa
 ### Stripe Connect (the wedge)
 
 Per PRD §4 and PAY-1/PAY-2/PAY-10: Clearwork uses Stripe Connect Express with the freelancer as the connected account holder, takes 0% application fee, and never settles funds in its own account. The `stripe_connections` table is where the OAuth tokens live; treat its existence (a row for the signed-in user) as the source of truth for "is this user payments-ready." Any future server action that hits Stripe on a user's behalf must read that user's `accessToken` and act on their account — never a platform-level key.
+
+### Backend stays in Next.js — port via module boundaries, not service boundaries
+
+**Decision:** All backend logic lives in this Next.js codebase — route handlers under `site/app/api/*` and server actions co-located with their consumers. No separate FastAPI / Go / etc. service for the MVP.
+
+**Why:** Future language portability is bought at the *function-signature* level, not the network level. Standing up a second service now would duplicate Supabase auth verification, `stripe_connections` token access, deploy pipelines, and types sync — all during the 20-week LTD ship (`PRD.MD` §10) with no payoff until a specific workload actually justifies extraction.
+
+**Convention for every new domain module under `site/lib/<domain>/`:**
+
+- **Core file** exports a pure function: `domainOp(deps, input): Promise<Result>`. Dependencies (`db`, `supabase`, `stripe`, `mailer`, …) are passed in as arguments — never imported as module-level singletons.
+- **`actions.ts`** is the server-action adapter (`"use server"`): builds deps, runs the auth check, calls the core function, translates the result to `{ ok } | { error }`, calls `revalidatePath()`.
+- **`route.ts`** under `site/app/api/<domain>/` is the route-handler adapter for external callers — Stripe webhooks, magic-link client portal, future mobile/public API. The set of route handlers under `app/api/*` is "the API" and is what would be ported to another language if extracted.
+- **Both adapters delegate to the same core function.** The core stays pure.
+- **No `next/*` imports, no `redirect()`, no `revalidatePath()`, no module-level `db` / `supabase` / `stripe` imports inside core files.** Those live only in adapters.
+
+`site/lib/profile/` is the closest current template (types + actions + SWR hook); new domains (`lib/stripe/`, `lib/invoices/`, `lib/projects/`, `lib/smart-files/`, …) follow the same shape with the deps-as-args refinement above.
+
+**Extract a sidecar service only when a specific workload demands it.** Real triggers:
+
+- Webhook ingestion outgrows Vercel function concurrency / duration limits.
+- PDF generation (INV-7) becomes CPU-bound enough to cost real money.
+- Background-job needs (overdue reminders INV-5, automations AUTO-2) outgrow Vercel cron + queue.
+- A specific workload depends on a Python / Go library with no good Node equivalent.
+
+In each case, carve out **that specific workload only** as a sidecar. The Next.js app keeps owning the user-facing surface.
+
+**Boundary check before merging any new domain module:**
+
+1. `rg "from ['\"]next" site/lib/<domain>/<core>.ts` → empty.
+2. `rg "from ['\"]@/lib/(db|supabase)" site/lib/<domain>/<core>.ts` → empty.
+3. The core function is callable from both `actions.ts` and a hypothetical `app/api/<domain>/route.ts` without modification.
+
+If a module passes those three checks, it is, by construction, ready for extraction the day it needs to be.
 
 ### Styling
 
